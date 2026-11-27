@@ -5,7 +5,7 @@ test('product details and quantity exist',()=>{assert.match(src,/productDetail/)
 test('guest checkout requires sign in instead of confirming an order',()=>{assert.match(src,/checkout/);assert.match(src,/Sign in to continue checkout/);});
 
 test('guest can add limited-edition first unit without authentication',()=>{assert.match(src,/async function addCart\(id:number,quantity=1\)\{if\(!account\)\{addGuest\(id,quantity\);return\}/);assert.match(src,/function addGuest\(id:number,quantity:number\)/);assert.match(src,/current\+quantity>p\.max_per_customer/);assert.match(src,/setGuestCart\(prev=>/);assert.match(src,/navigate\('\/cart'\)/);});
-test('guest limited item stays visible and sign-in merges cart',()=>{assert.match(src,/\.\.\.catalogProducts,\.\.\.searchResults/);assert.match(src,/for\(const item of guestCart\)/);assert.match(src,/setGuestCart\(\[\]\)/);});
+test('guest limited item stays visible and sign-in merges cart',()=>{assert.match(src,/\.\.\.catalogProducts,\.\.\.searchResults/);assert.match(src,/fetch\('\/api\/v1\/cart\/merge'/);assert.match(src,/setGuestCart\(\[\]\)/);});
 
 test('header badge counts guest cart lines without relying on catalog product hydration',()=>{assert.match(src,/const cartBadgeCount=account\?\.role==='customer'\?\(cart\?\.items\.reduce/);assert.match(src,/guestCart\.reduce\(\(n,i\)=>n\+i\.quantity,0\)/);assert.match(src,/cartLoading\?'…':cartBadgeCount/);});
 
@@ -46,3 +46,12 @@ test('API10 renders supplier descriptions in catalog and details only',()=>{
 });
 
 test('storefront brand is a real shop link',()=>{assert.match(src,/<a className="shop-logo" href="\/shop">/);});
+
+test('checkout confirmation reload never treats confirmation as an order id',()=>{
+ assert.match(src,/location\.pathname==='\/orders\/confirmation'/);
+ assert.match(src,/history\.replaceState\(\{\},'','\/orders'\);setView\('orders'\)/);
+});
+test('missing guest product is visible and checkout is blocked',()=>{
+ assert.match(src,/\(unavailable\)/);
+ assert.match(src,/disabled=\{visibleCart\.items\.some\(i=>i\.stock===0\)\}/);
+});
