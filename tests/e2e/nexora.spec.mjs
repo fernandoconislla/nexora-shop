@@ -49,7 +49,9 @@ test.describe('Nexora Shop browser regression — isolated lab',()=>{
 
   test('authenticated customer cart and payment methods work after refresh',async({page})=>{
     await login(page);
-    await expect(page.getByRole('button',{name:/Cart \(/})).toBeVisible();
+    // The guest navbar also contains Cart: wait for the authenticated identity
+    // before reloading, otherwise navigation can interrupt an in-flight login.
+    await expect(page.getByRole('button',{name:/Alice/})).toBeVisible();
     await page.reload();
     await page.getByRole('button',{name:/Cart \(/}).click();
     await expect(page.getByRole('heading',{name:'Your shopping cart'})).toBeVisible();
