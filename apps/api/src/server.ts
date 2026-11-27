@@ -11,7 +11,7 @@ import {updateProduct,buyOne} from './commerce.js';
 import {labReadOrder,labUpdateProduct} from './labs.js';
 import {api2UnsafeJwtSubject} from './api2.js';
 import {usd,publicProduct,publicCart,publicOrder,publicSupplier,centsFromUsd} from './money.js';
-import {getCart,addToCart,updateCartItem,removeCartItem,checkoutCart} from './cart.js';
+import {getCart,addToCart,mergeGuestCart,updateCartItem,removeCartItem,checkoutCart} from './cart.js';
 import {api6BuyOne} from './api6.js';
 import {api9LegacyOrders} from './api9.js';
 import {api8InvalidOrderError} from './api8.js';
@@ -72,6 +72,7 @@ app.get('/api/v1/orders/:id',c=>{
 });
 app.get('/api/v1/account/limited-purchases',c=>{const a=authenticate(c);if(!a)return c.json({error:'Unauthorized'},401);const rows=db.prepare("SELECT oi.product_id,SUM(oi.quantity) AS purchased FROM order_items oi JOIN orders o ON o.id=oi.order_id JOIN products p ON p.id=oi.product_id WHERE o.customer_id=? AND o.status='confirmed' AND p.is_limited_edition=1 GROUP BY oi.product_id").all(a.id) as Array<{product_id:number;purchased:number}>;return c.json({purchases:rows})});
 app.get('/api/v1/cart',c=>{const a=authenticate(c);if(!a)return c.json({error:'Unauthorized'},401);return c.json({cart:publicCart(getCart(db,a.id))})});
+app.post('/api/v1/cart/merge',async c=>{const a=authenticate(c);if(!a)return c.json({error:'Unauthorized'},401);if(a.role!=='customer')return c.json({error:'Customer role required'},403);const b=await parseBody(c);const result=mergeGuestCart(db,a.id,b?.items);return c.json(result.status===200?{cart:publicCart(result.cart)}:{error:result.error},result.status as any)});
 app.post('/api/v1/cart/items',async c=>{const a=authenticate(c);if(!a)return c.json({error:'Unauthorized'},401);const b=await parseBody(c);const r=addToCart(db,a.id,b?.product_id,b?.quantity??1);return c.json(r.status===200?{cart:publicCart(r.cart)}:{error:r.error},r.status as any)});
 app.patch('/api/v1/cart/items/:itemId',async c=>{const a=authenticate(c);if(!a)return c.json({error:'Unauthorized'},401);const id=parseId(c.req.param('itemId'));if(id===null)return c.json({error:'Invalid item ID'},400);const r=updateCartItem(db,a.id,id,await parseBody(c));return c.json(r.status===200?{cart:publicCart(r.cart)}:{error:r.error},r.status as any)});
 app.delete('/api/v1/cart/items/:itemId',c=>{const a=authenticate(c);if(!a)return c.json({error:'Unauthorized'},401);const id=parseId(c.req.param('itemId'));if(id===null)return c.json({error:'Invalid item ID'},400);const r=removeCartItem(db,a.id,id);return c.json(r.status===200?{cart:publicCart(r.cart)}:{error:r.error},r.status as any)});
