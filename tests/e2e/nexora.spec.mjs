@@ -102,11 +102,11 @@ test.describe('Nexora Shop browser regression — isolated lab',()=>{
     await page.getByLabel('Email').fill(admin.email);
     await page.getByLabel('Password').fill(admin.password);
     await page.locator('main form button[type="submit"]').click();
-    await expect(page.getByRole('heading',{name:'Resource Monitor'})).toBeVisible();
+    await expect(page.getByRole('heading',{name:/^Resource Monitor/})).toBeVisible();
     await expect(page.locator('.resource-history svg')).toHaveCount(3);
     await page.getByRole('button',{name:'Integrations'}).click();
     await expect(page.getByRole('heading',{name:'Supplier Integration'})).toBeVisible();
-    await expect(page.getByText('Connection:')).toContainText('connected');
+    await expect(page.locator('.integration-status')).toContainText('Connected');
   });
 
   test('API10 stored HTML triggers browser JavaScript only in vulnerable storefront',async({page,request})=>{
@@ -212,6 +212,57 @@ test.describe('Nexora Shop browser regression — isolated lab',()=>{
     }));
     expect(adminUi.header).toBe('rgb(13, 37, 56)');
     expect(adminUi.search).toBe('rgb(8, 127, 56)');
+  });
+
+
+  test('cart empty state and product removal use the correct brand hierarchy',async({page})=>{
+    await page.goto('/cart');
+    await expect(page.getByRole('heading',{name:'Your cart is empty'})).toBeVisible();
+    await expect(page.locator('.cart-page .empty-cart-action')).toHaveCSS('background-color','rgb(8, 127, 56)');
+    await page.getByRole('button',{name:/Continue shopping/}).click();
+    await expect(page).toHaveURL(/\/shop$/);
+    await page.locator('article.product').filter({hasText:'Laptop'}).first().getByRole('button',{name:'Add to cart'}).click();
+    await expect(page.locator('.cart-line')).toHaveCount(1);
+    await expect(page.locator('.cart-remove svg')).toHaveCount(1);
+    await expect(page.locator('.cart-page .checkout-button')).toHaveCSS('background-color','rgb(8, 127, 56)');
+    await page.getByRole('button',{name:'Remove Laptop'}).click();
+    await expect(page.getByRole('heading',{name:'Your cart is empty'})).toBeVisible();
+  });
+
+  test('orders, administration and integrations retain brand actions and compact layout',async({page})=>{
+    await login(page);
+    await expect(page.getByRole('button',{name:/Alice/})).toBeVisible();
+    await page.goto('/orders');
+    await expect(page.locator('.order-card').first()).toBeVisible();
+    await expect(page.locator('.order-card button').first()).toHaveCSS('background-color','rgb(8, 127, 56)');
+    await page.goto('/login');
+    await page.getByLabel('Email').fill(admin.email);
+    await page.getByLabel('Password').fill(admin.password);
+    await page.locator('main form button[type="submit"]').click();
+    await expect(page.getByRole('heading',{name:'Products'})).toBeVisible();
+    await expect(page.locator('.inventory-item').first()).toBeVisible();
+    const row=await page.locator('.inventory-item').first().evaluate(e=>({
+      flex:getComputedStyle(e).display,
+      image:getComputedStyle(e.querySelector('.inventory-info')).flexDirection
+    }));
+    expect(row.flex).toBe('flex');
+    expect(row.image).toBe('row');
+    await page.getByRole('button',{name:'Integrations'}).click();
+    await expect(page.locator('.integration-status')).toContainText('Connected');
+    await expect(page.locator('.integration-actions .button-primary')).toHaveCSS('background-color','rgb(8, 127, 56)');
+    await expect(page.locator('.integration-actions .button-secondary')).toHaveCSS('background-color','rgb(255, 255, 255)');
+  });
+
+  test('welcome CTA has readable secondary contrast and a filled services panel',async({page})=>{
+    await page.goto('/');
+    await expect(page.locator('.environment-service')).toHaveCount(3);
+    const button=await page.locator('.welcome-actions .secondary-cta').evaluate(e=>({
+      color:getComputedStyle(e).color,background:getComputedStyle(e).backgroundColor
+    }));
+    expect(button.color).toBe('rgb(8, 127, 56)');
+    expect(button.background).toBe('rgb(255, 255, 255)');
+    await page.getByRole('button',{name:/Enter Nexora Shop/}).click();
+    await expect(page).toHaveURL(/\/shop$/);
   });
 
   test('mobile storefront and challenge pages avoid horizontal overflow',async({page})=>{
