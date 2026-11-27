@@ -34,6 +34,8 @@ No real payments or purchases take place.
 
 ## Checkout flow
 
+**Cart price policy:** the training store records the unit price when an item is added to the cart. Later catalog price changes do not automatically reprice existing cart lines. Checkout normally uses the saved cart price; API03 deliberately demonstrates a separate client-controlled checkout-price override. This behavior is intentional and is not a catalog-sync defect.
+
 The Cart page presents items, a payment method and a single **Place order** action. `POST /api/v1/cart/checkout` creates the confirmed order and its simulated payment within one SQLite transaction; the response includes the order ID, final decimal USD display amount and masked payment receipt. The storefront then renders **Thank you for your order** from that response without fetching the catalog or order history. **View my orders** and **Continue shopping** fetch data only when selected. API03 intentionally remains demonstrable by injecting the client-controlled `price` field into an item of the checkout request in an authorized local lab.
 
 ## Lab coverage
