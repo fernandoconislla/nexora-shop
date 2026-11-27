@@ -43,7 +43,7 @@ test.describe('Nexora Shop browser regression — isolated lab',()=>{
     await expect(page.getByRole('heading',{name:'Thank you for your order!'})).toBeVisible();
     await page.reload();
     await expect(page.getByRole('heading',{name:'Order history'})).toBeVisible();
-    await expect(page).toHaveURL(/\/orders$/);
+    await expect(page).toHaveURL(base+'/');
     await expect(page.locator('.order-card').first()).toBeVisible();
   });
 
