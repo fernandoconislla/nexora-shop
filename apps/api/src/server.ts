@@ -1,6 +1,6 @@
 import {Hono} from 'hono';
 import {serve} from '@hono/node-server';
-import {readFileSync} from 'node:fs';
+import {readFileSync,writeFileSync} from 'node:fs';
 import {createHmac} from 'node:crypto';
 import {createRequire} from 'node:module';
 import {initialize,resetLabData} from './db.js';
@@ -49,13 +49,23 @@ app.post('/api/v1/admin/lab/reset',async c=>{
  const admin=db.prepare("SELECT id,password_hash,role FROM users WHERE email=?").get(body.email.toLowerCase()) as {id:number;password_hash:string;role:string}|undefined;
  if(!admin||admin.role!=='admin'||admin.id!==900||!validatePassword(body.password,admin.password_hash))return c.json({error:'Invalid administrator credentials'},403);
  labResetBusy=true;
+ const supplierFile=process.env.SUPPLIER_DB??'/supplier-data/products.json';
+ let supplierSnapshot:Buffer|null=null,supplierWasReset=false;
  try{
+  // Both data files are mounted in the same lab container. Retain the supplier state
+  // so a failed SQLite reset cannot silently leave the two services inconsistent.
+  supplierSnapshot=readFileSync(supplierFile);
   const key=createHmac('sha256',readFileSync(process.env.JWT_SECRET_FILE??'/data/jwt-secret')).update('supplier-reset-v1').digest('hex');
   const response=await fetch('http://supplier:8091/supplier/internal/reset',{method:'POST',headers:{'x-lab-reset-key':key},signal:AbortSignal.timeout(5000)});
   if(!response.ok)return c.json({error:'Supplier reset failed; local data was not modified'},502);
+  supplierWasReset=true;
   resetLabData(db);ensureDemoPasswords(db);
   return c.json({reset:true,message:'Lab and supplier data restored to initial state'});
- }catch(error){console.error('Lab reset failed',error);return c.json({error:'Lab reset failed; verify the state before retrying'},500)}
+ }catch(error){
+  console.error('Lab reset failed',error);
+  if(supplierWasReset&&supplierSnapshot){try{writeFileSync(supplierFile,supplierSnapshot)}catch(restoreError){console.error('Supplier rollback failed',restoreError);return c.json({error:'Lab reset incomplete; verify supplier and store data before retrying'},500)}}
+  return c.json({error:'Lab reset failed; previous supplier data was preserved'},500);
+ }
  finally{labResetBusy=false}
 });
 app.get('/api/v1/account',c=>{const a=authenticate(c);if(!a)return c.json({error:'Unauthorized'},401);const user=db.prepare('SELECT id,email,display_name,role FROM users WHERE id=?').get(a.id);return user?c.json({user}):c.json({error:'Unauthorized'},401)});
