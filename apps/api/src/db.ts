@@ -1,6 +1,7 @@
 import { DatabaseSync } from 'node:sqlite';
 import type {DatabaseSync as DbType} from 'node:sqlite';
 import {ensureDemoPayments} from './payments.js';
+import {ensureDemoPasswords} from './security.js';
 import { readFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 const dbPath = process.env.DB_PATH ?? resolve('data/nexora.db');
@@ -27,6 +28,7 @@ export function resetLabData(db:DbType){
   db.exec(readFileSync(seedPath,'utf8'));
   restoreCatalog(db,true);
   ensureDemoPayments(db);
+  ensureDemoPasswords(db);
   db.exec('COMMIT');
  }catch(e){db.exec('ROLLBACK');throw e}
 }
