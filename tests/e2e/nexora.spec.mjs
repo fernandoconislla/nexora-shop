@@ -61,9 +61,17 @@ test.describe('Nexora Shop browser regression — isolated lab',()=>{
 
   test('login credentials help navigates back to the welcome page',async({page})=>{
     await page.goto('/login');
-    await page.getByRole('button',{name:'lab welcome page'}).click();
+    await page.getByRole('link',{name:'lab welcome page'}).click();
     await expect(page).toHaveURL(base+'/');
     await expect(page.getByRole('heading',{name:'Sign in with a test account'})).toBeVisible();
+  });
+
+  test('footer About this lab opens the welcome page from the storefront',async({page})=>{
+    await page.goto('/shop');
+    await expect(page.getByRole('link',{name:'About this lab'})).toBeVisible();
+    await page.getByRole('link',{name:'About this lab'}).click();
+    await expect(page).toHaveURL(base+'/');
+    await expect(page.getByRole('heading',{name:'Explore. Test. Understand API Security.'})).toBeVisible();
   });
 
   test('invalid saved JWT produces a sign-in prompt instead of a cart failure',async({page})=>{
