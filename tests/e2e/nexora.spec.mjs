@@ -15,7 +15,7 @@ async function login(page,credentials=alice){
   await page.goto('/login');
   await page.getByLabel('Email').fill(credentials.email);
   await page.getByLabel('Password').fill(credentials.password);
-  await page.getByRole('button',{name:'Sign in',exact:true}).click();
+  await page.locator('main form button[type="submit"]').click();
 }
 async function bearer(request,credentials=admin){
   const response=await request.post(base+'/api/v1/auth/login',{data:credentials});
@@ -35,7 +35,7 @@ test.describe('Nexora Shop browser regression — isolated lab',()=>{
     await page.getByRole('button',{name:/Sign in to continue checkout/}).click();
     await page.getByLabel('Email').fill(alice.email);
     await page.getByLabel('Password').fill(alice.password);
-    await page.getByRole('button',{name:'Sign in',exact:true}).click();
+    await page.locator('main form button[type="submit"]').click();
     await expect(page.getByRole('heading',{name:'Your shopping cart'})).toBeVisible();
     await expect(page.getByText('Laptop',{exact:true}).first()).toBeVisible();
     await expect(page.getByText('USB-C Hub',{exact:true}).first()).toBeVisible();
@@ -84,7 +84,7 @@ test.describe('Nexora Shop browser regression — isolated lab',()=>{
     await page.goto('/monitor');
     await page.getByLabel('Email').fill(admin.email);
     await page.getByLabel('Password').fill(admin.password);
-    await page.getByRole('button',{name:'Sign in',exact:true}).click();
+    await page.locator('main form button[type="submit"]').click();
     await expect(page.getByRole('heading',{name:'Resource Monitor'})).toBeVisible();
     await expect(page.locator('.resource-history svg')).toHaveCount(3);
     await page.getByRole('button',{name:'Integrations'}).click();
