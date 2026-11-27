@@ -147,6 +147,30 @@ test.describe('Nexora Shop browser regression — isolated lab',()=>{
     expect((await feed.json()).products.find(p=>p.id==='SUP-1001').price).toBe('1000.00');
   });
 
+
+  test('Nexora Navy and Green storefront identity renders consistently at desktop and mobile',async({page})=>{
+    await page.setViewportSize({width:1440,height:900});
+    await page.goto('/shop');
+    await expect(page.locator('.shop-header')).toBeVisible();
+    await expect(page.locator('.catalog-grid .product')).toHaveCount(10);
+    const desktop=await page.evaluate(()=>{
+      const color=s=>getComputedStyle(document.querySelector(s)).backgroundColor;
+      const grid=getComputedStyle(document.querySelector('.catalog-grid')).gridTemplateColumns;
+      return {header:color('.shop-header'),footer:color('.shop-footer'),action:color('.catalog-grid .add-cart'),columns:grid.split(' ').length};
+    });
+    expect(desktop.header).toBe('rgb(13, 37, 56)');
+    expect(desktop.footer).toBe(desktop.header);
+    expect(desktop.action).toBe('rgb(8, 127, 56)');
+    expect(desktop.columns).toBe(4);
+    await page.setViewportSize({width:390,height:844});
+    const mobile=await page.evaluate(()=>({
+      columns:getComputedStyle(document.querySelector('.catalog-grid')).gridTemplateColumns.split(' ').length,
+      overflow:document.documentElement.scrollWidth>window.innerWidth+2
+    }));
+    expect(mobile.columns).toBe(1);
+    expect(mobile.overflow).toBe(false);
+  });
+
   test('mobile storefront and challenge pages avoid horizontal overflow',async({page})=>{
     await page.setViewportSize({width:390,height:844});
     for(const path of ['/shop','/challenges?api=api01']){
