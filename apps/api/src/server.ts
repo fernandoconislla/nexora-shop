@@ -59,7 +59,7 @@ app.post('/api/v1/admin/lab/reset',async c=>{
   const response=await fetch('http://supplier:8091/supplier/internal/reset',{method:'POST',headers:{'x-lab-reset-key':key},signal:AbortSignal.timeout(5000)});
   if(!response.ok)return c.json({error:'Supplier reset failed; local data was not modified'},502);
   supplierWasReset=true;
-  resetLabData(db);ensureDemoPasswords(db);
+  resetLabData(db);
   return c.json({reset:true,message:'Lab and supplier data restored to initial state'});
  }catch(error){
   console.error('Lab reset failed',error);
