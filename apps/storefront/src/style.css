@@ -847,3 +847,25 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 @media(prefers-reduced-motion:reduce){
   .shop-content .cart-page .cart-line .cart-remove{transition:none}
 }
+
+
+/* Nexora Shop identity: SVG isotype assets, no provisional letter tiles. */
+.shop-header .shop-logo img.brand-icon{
+  display:block;flex:0 0 auto;width:40px;height:40px;
+  padding:0;margin-right:4px;border:0;border-radius:0;
+  background:transparent;box-shadow:none;object-fit:contain;
+}
+.welcome-brand img.mark{
+  display:block;flex:0 0 auto;width:46px;height:46px;
+  padding:0;border:0;border-radius:0;background:transparent;
+  box-shadow:none;object-fit:contain;
+}
+.challenge-brand img.challenge-brand-icon{
+  display:block;flex:0 0 auto;width:36px;height:36px;
+  border:0;border-radius:0;background:transparent;object-fit:contain;
+}
+@media(max-width:600px){
+  .shop-header .shop-logo img.brand-icon{width:34px;height:34px}
+  .welcome-brand img.mark{width:40px;height:40px}
+  .challenge-brand img.challenge-brand-icon{width:32px;height:32px}
+}
