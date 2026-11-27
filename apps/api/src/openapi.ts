@@ -2,7 +2,7 @@ export const openApiSpec = {
   openapi:'3.0.3',info:{title:'Nexora Shop API',version:'0.3.0',description:'Documented legitimate operations. Local fictional training environment.'},
   servers:[{url:'/'}],components:{securitySchemes:{bearerAuth:{type:'http',scheme:'bearer',bearerFormat:'JWT'}}},
   paths:{
-    '/api/v1/auth/login':{post:{tags:['Identity'],summary:'Sign in',requestBody:{required:true,content:{'application/json':{schema:{type:'object',required:['email','password'],properties:{email:{type:'string',format:'email'},password:{type:'string',format:'password'}}}}}},responses:{'200':{description:'Bearer token'},'401':{description:'Invalid credentials'}}}},
+    '/api/v1/auth/login':{post:{tags:['Identity'],summary:'Sign in',requestBody:{required:true,content:{'application/json':{schema:{type:'object',required:['email','password'],properties:{email:{type:'string',format:'email'},password:{type:'string',format:'password'}}},example:{email:'alice@nexora.example',password:'AliceDemo!2026'}}}},responses:{'200':{description:'Bearer token'},'401':{description:'Invalid credentials'}}}},
     '/api/v1/account':{get:{tags:['Identity'],summary:'Get own account',security:[{bearerAuth:[]}],responses:{'200':{description:'Account'},'401':{description:'Unauthorized'}}}},
     '/api/v1/account/profile':{get:{tags:['Identity'],summary:'Read own account profile',security:[{bearerAuth:[]}],responses:{'200':{description:'Profile'},'401':{description:'Unauthorized'}}}},
     '/api/v1/account/payment-methods':{get:{tags:['Payments'],summary:'List own masked demo payment methods',security:[{bearerAuth:[]}],responses:{'200':{description:'Demo payment methods'},'401':{description:'Unauthorized'}}}},
