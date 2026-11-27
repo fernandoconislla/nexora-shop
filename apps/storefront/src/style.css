@@ -481,3 +481,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
   .shop-header nav button{transition:none}
   .shop-content .catalog-grid .product:hover,.shop-content .catalog-grid .add-cart:hover{transform:none}
 }
+
+/* Navigation badge and reusable line icon */
+.shop-header .nav-cart-button{display:inline-flex;align-items:center;justify-content:center;gap:4px}
+.shop-header .nav-cart-button svg{width:18px;height:18px;margin-right:4px;flex-shrink:0}
+.shop-header .nav-cart-count{color:var(--nx-green-bright);font-weight:850}
