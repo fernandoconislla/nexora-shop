@@ -12,7 +12,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
       - name: Verify project source tree
@@ -88,6 +88,23 @@ jobs:
           echo "PASS persisted supplier product after restart"
       - name: Controlled API4 load assessment
         run: node scripts/api4-load-test.mjs
+      - name: Install Chromium for end-to-end tests
+        run: npx playwright install --with-deps chromium
+      - name: Browser end-to-end regression (isolated CI lab)
+        env:
+          NEXORA_E2E_ALLOW_RESET: 'YES'
+          NEXORA_BASE: http://127.0.0.1:8090
+          NEXORA_SUPPLIER: http://127.0.0.1:8091
+        run: npm run test:e2e
+      - name: Upload Playwright diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexora-browser-diagnostics
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
       - name: Diagnostics on failure
         if: failure()
         run: |
