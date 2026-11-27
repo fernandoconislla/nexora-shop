@@ -486,3 +486,160 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .shop-header .nav-cart-button{display:inline-flex;align-items:center;justify-content:center;gap:4px}
 .shop-header .nav-cart-button svg{width:18px;height:18px;margin-right:4px;flex-shrink:0}
 .shop-header .nav-cart-count{color:var(--nx-green-bright);font-weight:850}
+
+
+/* Nexora Shop / Identity consolidation
+   Keep feedback semantics (red errors, amber warnings) distinct from brand green. */
+:root{
+  --nx-green-tint:#e9f7ee;
+  --nx-green-border:#a9dcbc;
+  --nx-navy-soft:#183c52;
+  --nx-error:#b42332;
+  --nx-warning:#936131;
+}
+.shop-content .auth-heading span,
+.shop-content .account-heading small,
+.shop-content .admin-heading small,
+.shop-content .detail-content>small,
+.shop-content .product-category{color:var(--nx-green)}
+.shop-content .profile-card,.shop-content .payment-card,
+.shop-content .order-card,.shop-content .order-detail-card,
+.shop-content .inventory-item,.shop-content .editor-image-column,
+.shop-content .editor-fields,.shop-content .checkout-payment{
+  border-color:var(--nx-border);border-radius:var(--nx-radius)
+}
+.shop-content .account-tabs .active-tab{color:var(--nx-green);border-bottom-color:var(--nx-green)}
+.shop-content .account-tabs button:not(.active-tab):hover{color:var(--nx-green);background:var(--nx-green-tint)}
+.shop-content .payment-option{background:#f7faf8;border:1px solid #dbe8df;min-height:62px}
+.shop-content .payment-option input{accent-color:var(--nx-green)}
+.shop-content .payment-option:has(input:checked){background:var(--nx-green-tint);border-color:var(--nx-green)}
+.shop-content .payment-card{background:#f7fafb;border:1px solid var(--nx-border)!important}
+.shop-content .payment-card-mark{background:var(--nx-navy);color:#fff}
+.shop-content .profile-avatar{background:var(--nx-navy);color:#fff}
+.shop-content .order-status{color:var(--nx-green);font-weight:750}
+.shop-content .order-dashboard .orders-toolbar .order-lookup button,
+.shop-content .order-dashboard .order-lookup button,
+.shop-content .inventory-actions button,
+.shop-content .admin-product-search button[type="button"]{
+  background:var(--nx-green-tint);border:1px solid var(--nx-green-border);
+  color:#08672f;font-weight:750;border-radius:9px
+}
+.shop-content .order-dashboard .orders-toolbar .order-lookup button:hover,
+.shop-content .inventory-actions button:hover,
+.shop-content .admin-product-search button[type="button"]:hover{
+  background:#d7f0e1;border-color:var(--nx-green)
+}
+.shop-content .editor-fields input,.shop-content .editor-fields textarea,
+.shop-content .admin-product-search input,
+.shop-content .order-dashboard .order-lookup input{
+  background:#fff;border-color:#cddde4;color:var(--nx-text)
+}
+.shop-content .editor-fields input:focus,.shop-content .editor-fields textarea:focus{
+  outline:3px solid var(--nx-focus);outline-offset:2px
+}
+.shop-content .editor-image-preview{background:#f0f6f8}
+.shop-content .resource-metric{background:#f5f9f7}
+.shop-content .resource-history{background:#f8fbf9}
+.shop-content .resource-metric strong{color:var(--nx-text)}
+.shop-content .resource-history h3{color:var(--nx-text)}
+.shop-content .detail-price{color:var(--nx-text)}
+.shop-content .stock-indicator{color:var(--nx-green)!important}
+.shop-content .secondary-buy,.shop-content .stepper button{
+  color:var(--nx-green);border-color:var(--nx-green-border);background:#fff
+}
+.shop-content .secondary-buy:hover,.shop-content .stepper button:not(:disabled):hover{background:var(--nx-green-tint)}
+.shop-content .account-dashboard a,.shop-content .order-dashboard a,
+.shop-content .admin-heading a{color:var(--nx-green)}
+.shop-content .checkout-note,.shop-content .payment-disclaimer{color:var(--nx-muted)}
+.shop-content .text-button{color:var(--nx-green)}
+.shop-content .text-button:hover{color:var(--nx-green-hover)}
+.shop-content .error{background:#fff1f1;border:1px solid #f0b9bc;color:#92212f}
+.shop-content .import-error-preview,.shop-content .order-error{border-color:#ebc5ca}
+.shop-content .stock-out{color:#a73738!important}
+.shop-content .product-badge{color:var(--nx-warning)}
+.shop-content .search-page .catalog-heading small{color:var(--nx-green)}
+.shop-content .search-page .product{border-color:var(--nx-border);box-shadow:var(--nx-shadow)}
+.shop-content .search-page .product-link:hover{color:var(--nx-green)!important}
+.shop-content .search-page .product-media{background:#e9f0f5}
+.shop-content .search-page .body{color:var(--nx-text)}
+/* Guided security challenges */
+.challenge-page .challenge-heading>a,.challenge-page .challenge-detail a{color:var(--nx-green)}
+.challenge-page .challenge-detail-top span:first-child,.challenge-page .challenge-kicker{color:var(--nx-green)}
+.challenge-page .challenge-sidebar button b{color:var(--nx-green)}
+.challenge-page .challenge-sidebar button:hover{background:var(--nx-green-tint);color:var(--nx-text)}
+.challenge-page .challenge-help{
+  background:#f7faf8;border-color:var(--nx-border);
+  border-radius:12px
+}
+.challenge-page .challenge-help button,.challenge-page .challenge-pager button,
+.challenge-page .challenge-mobile-picker>button{
+  background:#fff;border-color:var(--nx-green-border);
+  color:var(--nx-green);border-radius:9px
+}
+.challenge-page .challenge-help button:not(:disabled):hover,
+.challenge-page .challenge-pager button:not(:disabled):hover{background:var(--nx-green-tint);color:var(--nx-green-hover)}
+.challenge-page .challenge-hint{background:var(--nx-green-tint);border:1px solid #c8e6d2}
+.challenge-page .challenge-hint b{color:var(--nx-green)}
+.challenge-page .challenge-solution{border-color:var(--nx-border)}
+.challenge-page .challenge-solution .challenge-expected{
+  background:#e9f7ee;border-left-color:var(--nx-green)
+}
+.challenge-page .challenge-solution pre{background:var(--nx-navy);color:#e7f3f8}
+.challenge-page .challenge-mobile-picker>div{border-color:var(--nx-border)}
+.challenge-page .challenge-mobile-picker>div button{color:var(--nx-text);background:#fff}
+.challenge-page .challenge-mobile-picker>div button:hover{background:var(--nx-green-tint)}
+/* Training welcome and onboarding */
+.welcome-guide{background:var(--nx-canvas);color:var(--nx-text)}
+.welcome-guide .welcome-nav{background:var(--nx-navy);max-width:none;
+  padding:20px max(22px,calc((100vw - 1200px)/2))}
+.welcome-guide .welcome-brand,.welcome-guide .welcome-brand span{color:#fff}
+.welcome-guide .welcome-brand .mark{background:var(--nx-green);color:#fff}
+.welcome-guide .welcome-brand small{color:#b9d2df}
+.welcome-guide .welcome-nav .welcome-doc-link{color:#6df0a0}
+.welcome-guide .welcome-nav .welcome-doc-link:hover{color:#ccffde}
+.welcome-guide .welcome-copy .eyebrow,.welcome-guide .guide-overline,
+.welcome-guide .guide-challenge-title b{color:var(--nx-green)}
+.welcome-guide .welcome-copy h1{color:var(--nx-text)}
+.welcome-guide .primary-cta,.welcome-guide .welcome-actions .primary-cta{
+  background:var(--nx-green);color:#fff;box-shadow:none;border-radius:10px
+}
+.welcome-guide .primary-cta:hover{background:var(--nx-green-hover)}
+.welcome-guide .secondary-cta{color:var(--nx-green)}
+.welcome-guide .secondary-cta:hover{color:var(--nx-green-hover)}
+.welcome-guide .welcome-visual{background:var(--nx-navy)}
+.welcome-guide .welcome-trust span::before{color:var(--nx-green)}
+.welcome-guide .welcome-footer{background:var(--nx-navy);color:#d0e1ed}
+.welcome-guide .welcome-footer a{color:#6df0a0}
+.welcome-guide .guide-port{background:var(--nx-green-tint);color:var(--nx-green)}
+.welcome-guide .guide-card,.welcome-guide .guide-challenge{
+  border-color:var(--nx-border);border-radius:var(--nx-radius);
+  box-shadow:var(--nx-shadow)
+}
+.welcome-guide .guide-card a:not(.guide-access-button),
+.welcome-guide .guide-monitor-note a,
+.welcome-guide .guide-view,
+.welcome-guide .guide-challenge-title>span:last-child,
+.welcome-guide .guide-all-challenges:not(:hover){color:var(--nx-green)}
+.welcome-guide .guide-tools>*{
+  background:#fff;border-color:var(--nx-border);color:var(--nx-text);
+  transition:background .16s,border-color .16s
+}
+.welcome-guide .guide-tools>*:hover{background:var(--nx-green-tint);border-color:var(--nx-green-border)}
+.welcome-guide .guide-monitor-note{background:var(--nx-green-tint);border-color:#c9e4d2;color:#264b38}
+.welcome-guide .guide-challenge-link:hover,.welcome-guide .guide-challenge-link:focus-visible{
+  border-color:var(--nx-green);box-shadow:0 9px 25px #0d253817
+}
+.welcome-guide .guide-modal{border:1px solid var(--nx-border)}
+.welcome-guide .guide-modal form button[type="submit"]:not(.guide-danger){
+  background:var(--nx-green);color:#fff
+}
+.welcome-guide .guide-danger{background:var(--nx-error);color:#fff}
+.welcome-guide .guide-danger:hover{background:#931a28}
+.welcome-guide .guide-message{color:var(--nx-green)}
+@media(max-width:760px){
+  .welcome-guide .welcome-nav{padding:16px}
+  .challenge-page .challenge-header{padding:12px 16px}
+}
+@media(prefers-reduced-motion:reduce){
+  .welcome-guide .guide-tools>*{transition:none}
+}
