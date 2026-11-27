@@ -173,6 +173,47 @@ test.describe('Nexora Shop browser regression — isolated lab',()=>{
     }
   });
 
+  test('Navy and Green identity covers welcome page and guided challenges',async({page})=>{
+    await page.goto('/');
+    await expect(page.getByRole('heading',{name:'Explore. Test. Understand API Security.'})).toBeVisible();
+    const welcome=await page.evaluate(()=>({
+      header:getComputedStyle(document.querySelector('.welcome-nav')).backgroundColor,
+      cta:getComputedStyle(document.querySelector('.primary-cta')).backgroundColor,
+      footer:getComputedStyle(document.querySelector('.welcome-footer')).backgroundColor
+    }));
+    expect(welcome.header).toBe('rgb(13, 37, 56)');
+    expect(welcome.cta).toBe('rgb(8, 127, 56)');
+    expect(welcome.footer).toBe(welcome.header);
+    await page.goto('/challenges?api=api01');
+    await expect(page.getByRole('heading',{name:'Security Challenges'})).toBeVisible();
+    const challenge=await page.evaluate(()=>({
+      header:getComputedStyle(document.querySelector('.challenge-header')).backgroundColor,
+      action:getComputedStyle(document.querySelector('.challenge-help button')).color
+    }));
+    expect(challenge.header).toBe('rgb(13, 37, 56)');
+    expect(challenge.action).toBe('rgb(8, 127, 56)');
+  });
+
+  test('customer payment and administrator management use brand colors',async({page})=>{
+    await login(page);
+    await expect(page.getByRole('button',{name:/Alice/})).toBeVisible();
+    await page.goto('/payment-methods');
+    await expect(page.getByRole('heading',{name:'Payment methods'})).toBeVisible();
+    const customer=await page.evaluate(()=>getComputedStyle(document.querySelector('.payment-card-mark')).backgroundColor);
+    expect(customer).toBe('rgb(13, 37, 56)');
+    await page.goto('/login');
+    await page.getByLabel('Email').fill(admin.email);
+    await page.getByLabel('Password').fill(admin.password);
+    await page.locator('main form button[type="submit"]').click();
+    await expect(page.getByRole('heading',{name:'Products'})).toBeVisible();
+    const adminUi=await page.evaluate(()=>({
+      header:getComputedStyle(document.querySelector('.shop-header')).backgroundColor,
+      search:getComputedStyle(document.querySelector('.admin-product-search button[type="submit"]')).backgroundColor
+    }));
+    expect(adminUi.header).toBe('rgb(13, 37, 56)');
+    expect(adminUi.search).toBe('rgb(8, 127, 56)');
+  });
+
   test('mobile storefront and challenge pages avoid horizontal overflow',async({page})=>{
     await page.setViewportSize({width:390,height:844});
     for(const path of ['/shop','/challenges?api=api01']){
