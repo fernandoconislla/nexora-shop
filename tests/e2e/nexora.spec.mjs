@@ -59,6 +59,13 @@ test.describe('Nexora Shop browser regression — isolated lab',()=>{
     await expect(page.getByText(/Visa.*4242/).first()).toBeVisible();
   });
 
+  test('login credentials help navigates back to the welcome page',async({page})=>{
+    await page.goto('/login');
+    await page.getByRole('button',{name:'lab welcome page'}).click();
+    await expect(page).toHaveURL(/\\/$/);
+    await expect(page.getByRole('heading',{name:'Sign in with a test account'})).toBeVisible();
+  });
+
   test('invalid saved JWT produces a sign-in prompt instead of a cart failure',async({page})=>{
     await page.goto('/shop');
     await page.evaluate(()=>{
