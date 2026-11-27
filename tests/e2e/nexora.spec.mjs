@@ -162,13 +162,15 @@ test.describe('Nexora Shop browser regression — isolated lab',()=>{
     expect(desktop.footer).toBe(desktop.header);
     expect(desktop.action).toBe('rgb(8, 127, 56)');
     expect(desktop.columns).toBe(4);
-    await page.setViewportSize({width:390,height:844});
-    const mobile=await page.evaluate(()=>({
-      columns:getComputedStyle(document.querySelector('.catalog-grid')).gridTemplateColumns.split(' ').length,
-      overflow:document.documentElement.scrollWidth>window.innerWidth+2
-    }));
-    expect(mobile.columns).toBe(1);
-    expect(mobile.overflow).toBe(false);
+    for(const width of [1024,768,390,320]){
+      await page.setViewportSize({width,height:844});
+      const view=await page.evaluate(()=>({
+        columns:getComputedStyle(document.querySelector('.catalog-grid')).gridTemplateColumns.split(' ').length,
+        overflow:document.documentElement.scrollWidth>window.innerWidth+2
+      }));
+      expect(view.columns,'grid columns at '+width).toBe(width>=900?3:width>=600?2:1);
+      expect(view.overflow,'horizontal overflow at '+width).toBe(false);
+    }
   });
 
   test('mobile storefront and challenge pages avoid horizontal overflow',async({page})=>{
