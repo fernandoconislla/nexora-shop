@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { DatabaseSync } from 'node:sqlite';
 import { readFileSync } from 'node:fs';
+import { resetLabData } from '../src/db.ts';
 const schema=readFileSync('database/schema.sql','utf8');
 const seed=readFileSync('database/seed.sql','utf8');
 function fixture(){const d=new DatabaseSync(':memory:');d.exec('PRAGMA foreign_keys=ON');d.exec(schema);d.exec(seed);return d;}
@@ -9,3 +10,24 @@ test('seed creates expected identities and orders',()=>{const d=fixture();assert
 test('order totals equal line totals',()=>{const d=fixture();const mismatch=d.prepare('SELECT o.id FROM orders o JOIN order_items i ON i.order_id=o.id GROUP BY o.id HAVING o.total_cents != SUM(i.quantity*i.unit_price_cents)').all();assert.equal(mismatch.length,0);d.close()});
 test('limited product, supplier prices and sync versions are consistent',()=>{const d=fixture();assert.equal(d.prepare('SELECT stock FROM products WHERE id=1006').get().stock,5);assert.equal(d.prepare('SELECT max_per_customer FROM products WHERE id=1006').get().max_per_customer,1);assert.equal(d.prepare('SELECT price_cents FROM products WHERE id=1100').get().price_cents,100000);assert.equal(d.prepare('SELECT min_allowed_price_cents FROM products WHERE id=1100').get().min_allowed_price_cents,80000);assert.equal(d.prepare('SELECT COUNT(*) AS n FROM product_sync_state').get().n,2);d.close()});
 test('negative stock rejected by SQLite constraint',()=>{const d=fixture();assert.throws(()=>d.prepare('UPDATE products SET stock=-1 WHERE id=1006').run());d.close()});
+
+test('reset rebuilds products, payments and seeded cart in one operation',()=>{
+ const d=fixture();
+ d.prepare('UPDATE products SET price_cents=1 WHERE id=1100').run();
+ d.prepare('UPDATE cart_items SET quantity=3 WHERE product_id=1001').run();
+ resetLabData(d);
+ assert.equal(d.prepare('SELECT price_cents FROM products WHERE id=1100').get().price_cents,100000);
+ assert.equal(d.prepare('SELECT quantity FROM cart_items WHERE product_id=1001').get().quantity,1);
+ assert.equal(d.prepare('SELECT COUNT(*) n FROM products').get().n,40000);
+ assert.ok(d.prepare('SELECT COUNT(*) n FROM payment_methods').get().n>=2);
+ d.close();
+});
+test('reset rolls back seed changes if generated catalog restoration fails',()=>{
+ const d=fixture();
+ d.prepare('UPDATE products SET price_cents=12345 WHERE id=1100').run();
+ d.exec("CREATE TRIGGER prevent_catalog BEFORE INSERT ON products WHEN NEW.id=2000 BEGIN SELECT RAISE(ABORT,'test fixture failure'); END");
+ assert.throws(()=>resetLabData(d),/test fixture failure/);
+ assert.equal(d.prepare('SELECT price_cents FROM products WHERE id=1100').get().price_cents,12345);
+ assert.equal(d.prepare('SELECT COUNT(*) n FROM products').get().n,7);
+ d.close();
+});
