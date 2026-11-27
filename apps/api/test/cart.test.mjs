@@ -1,4 +1,4 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {DatabaseSync} from 'node:sqlite';import {readFileSync} from 'node:fs';import {getCart,addToCart,updateCartItem,removeCartItem,checkoutCart} from '../src/cart.ts';import {ensureDemoPayments} from '../src/payments.ts';
+import test from 'node:test';import assert from 'node:assert/strict';import {DatabaseSync} from 'node:sqlite';import {readFileSync} from 'node:fs';import {getCart,addToCart,mergeGuestCart,updateCartItem,removeCartItem,checkoutCart} from '../src/cart.ts';import {ensureDemoPayments} from '../src/payments.ts';
 function setup(){const db=new DatabaseSync(':memory:');db.exec('PRAGMA foreign_keys=ON');db.exec(readFileSync('database/schema.sql','utf8'));db.exec(readFileSync('database/seed.sql','utf8'));ensureDemoPayments(db);return db}
 test('cart changes never create draft orders',()=>{const db=setup();assert.equal(addToCart(db,101,1002,1).status,200);assert.equal(db.prepare("SELECT COUNT(*) n FROM orders WHERE customer_id=101").get().n,1);db.close()});
 test('API3 is exploitable at Place Order through price, not during cart edits',()=>{const db=setup();const i=getCart(db,101).items[0];assert.equal(updateCartItem(db,102,i.id,{quantity:2}).status,404);assert.equal(updateCartItem(db,101,i.id,{quantity:2,unit_price_cents:1}).status,422);assert.equal(updateCartItem(db,101,i.id,{quantity:2}).status,200);const result=checkoutCart(db,101,{payment_method_id:1,items:[{product_id:1001,quantity:2,price:0.01}]});assert.equal(result.status,201);assert.equal(result.total_cents,2);assert.equal(result.payment.status,'simulated');assert.equal(db.prepare('SELECT COUNT(*) AS n FROM order_payments WHERE order_id=?').get(result.order_id).n,1);assert.equal(db.prepare('SELECT total_cents FROM orders WHERE id=?').get(result.order_id).total_cents,2);assert.equal(db.prepare('SELECT unit_price_cents FROM order_items WHERE order_id=?').get(result.order_id).unit_price_cents,1);db.close()});
@@ -18,3 +18,30 @@ test('API06 first checkout quantity bypass does not permit a second purchase',()
 
 test('API06 affects generated limited-edition product 2004, not only 1006',()=>{const db=setup();db.prepare("INSERT INTO products(id,name,description,price_cents,stock,is_limited_edition,max_per_customer,created_at,updated_at) VALUES(2004,'Test limited','Test',2500,8,1,1,'2026-01-01','2026-01-01')").run();assert.equal(addToCart(db,101,2004,1).status,200);assert.equal(addToCart(db,101,2004,1).status,422);const result=checkoutCart(db,101,{payment_method_id:1,items:[{product_id:1001,quantity:1},{product_id:2004,quantity:3}]});assert.equal(result.status,201);assert.equal(result.items.find(i=>i.product_id===2004).quantity,3);assert.equal(db.prepare('SELECT stock FROM products WHERE id=2004').get().stock,5);assert.equal(addToCart(db,101,2004,1).status,422);assert.equal(addToCart(db,102,2004,1).status,200);db.close()});
 test('non-limited checkout still rejects altered quantity',()=>{const db=setup();const result=checkoutCart(db,101,{payment_method_id:1,items:[{product_id:1001,quantity:3}]});assert.equal(result.status,422);db.close()});
+
+test('guest cart merge is atomic when later line fails',()=>{
+ const db=setup();
+ const before=getCart(db,101);
+ const result=mergeGuestCart(db,101,[{product_id:1002,quantity:1},{product_id:9999999,quantity:1}]);
+ assert.equal(result.status,404);
+ assert.deepEqual(getCart(db,101),before);
+ db.close();
+});
+test('guest cart merge keeps one already-present limited edition unit',()=>{
+ const db=setup();
+ const initial=addToCart(db,101,1006,1);
+ assert.equal(initial.status,200);
+ const result=mergeGuestCart(db,101,[{product_id:1006,quantity:1},{product_id:1002,quantity:1}]);
+ assert.equal(result.status,200);
+ assert.equal(getCart(db,101).items.find(x=>x.product_id===1006).quantity,1);
+ assert.equal(getCart(db,101).items.find(x=>x.product_id===1002).quantity,1);
+ db.close();
+});
+test('guest cart merge rejects duplicate product ids without changing cart',()=>{
+ const db=setup();
+ const before=getCart(db,101);
+ const r=mergeGuestCart(db,101,[{product_id:1002,quantity:1},{product_id:1002,quantity:1}]);
+ assert.equal(r.status,422);
+ assert.deepEqual(getCart(db,101),before);
+ db.close();
+});
