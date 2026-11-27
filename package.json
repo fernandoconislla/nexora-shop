@@ -7,9 +7,13 @@
   "scripts": {
     "dev:api": "npm run dev -w @nexora/api",
     "dev:web": "npm run dev -w @nexora/storefront",
-    "test:data": "node --experimental-strip-types --test apps/api/test/*.test.mjs"
+    "test:data": "node --experimental-strip-types --test apps/api/test/*.test.mjs",
+    "test:e2e": "playwright test"
   },
   "engines": {
     "node": ">=22.13.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.0"
   }
 }
