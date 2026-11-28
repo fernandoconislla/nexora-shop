@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="Super Insecure Tech Store — isotipo de bolsa tecnológica con microchip">
+<title>Super Insecure Tech Store — isotipo principal</title>
+<defs><clipPath id="fracture" clipPathUnits="userSpaceOnUse"><path d="M1024.00,1024.00 L1024.00,0.00 L0.00,0.00 L0.00,216.41 L477.95,534.51 L450.25,579.02 L650.86,705.03 L620.65,745.65 L987.08,1024.00 L1024.00,1024.00 Z"/><path d="M0.00,1024.00 L914.34,1024.00 L559.35,754.35 L587.14,716.97 L389.75,592.98 L418.05,547.49 L0.00,269.26 L0.00,1024.00 Z"/></clipPath></defs>
+<g id="sits-isotype" clip-path="url(#fracture)">
+  <g id="bag-handle"><path d="M365 338V272C365 191 431 125 512 125C593 125 659 191 659 272V338" fill="none" stroke="#087F38" stroke-width="75" stroke-linecap="round"/></g>
+  <g id="shopping-bag"><path d="M178 324H846L798 871Q794 910 752 910H272Q230 910 226 871Z" fill="#0D2538"/></g>
+  <g id="microchip-contacts"><path d="M429 446V485M429 711V750" stroke="#087F38" stroke-width="28" stroke-linecap="round"/><path d="M512 446V485M512 711V750" stroke="#087F38" stroke-width="28" stroke-linecap="round"/><path d="M595 446V485M595 711V750" stroke="#087F38" stroke-width="28" stroke-linecap="round"/><path d="M350 535H391M633 535H674" stroke="#087F38" stroke-width="28" stroke-linecap="round"/><path d="M350 617H391M633 617H674" stroke="#087F38" stroke-width="28" stroke-linecap="round"/></g>
+  <g id="microchip-core"><rect x="382" y="476" width="260" height="244" rx="34" fill="#087F38"/><rect x="433" y="528" width="158" height="140" rx="19" fill="none" stroke="#FFFFFF" stroke-width="23"/></g>
+</g>
+</svg>
