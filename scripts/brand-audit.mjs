@@ -3,7 +3,7 @@ import {readFileSync} from 'node:fs';
 import assert from 'node:assert/strict';
 
 const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
-const relevant=files.filter(path=>/\.(?:ts|tsx|js|mjs|sql|svg|md|html|yml|yaml|json|css|sh)$/.test(path));
+const relevant=files.filter(path=>path!=='scripts/brand-audit.mjs' && /\.(?:ts|tsx|js|mjs|sql|svg|md|html|yml|yaml|json|css|sh)$/.test(path));
 const failures=[];
 for(const path of relevant){
   const source=readFileSync(path,'utf8');
