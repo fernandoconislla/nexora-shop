@@ -1,4 +1,4 @@
-INSERT INTO users VALUES (101,'alice@nexora.example','!disabled-until-auth-implemented','Alice Morgan','customer','2026-01-01T00:00:00Z'),(102,'bob@nexora.example','!disabled-until-auth-implemented','Bob Wilson','customer','2026-01-01T00:00:00Z'),(900,'admin@nexora.example','!disabled-until-auth-implemented','Shop Admin','admin','2026-01-01T00:00:00Z');
+INSERT INTO users VALUES (101,'alice@superinsecuretechstore.example','!disabled-until-auth-implemented','Alice Morgan','customer','2026-01-01T00:00:00Z'),(102,'bob@superinsecuretechstore.example','!disabled-until-auth-implemented','Bob Wilson','customer','2026-01-01T00:00:00Z'),(900,'admin@superinsecuretechstore.example','!disabled-until-auth-implemented','Shop Admin','admin','2026-01-01T00:00:00Z');
 INSERT INTO products (id,name,description,price_cents,stock,supplier_product_id,min_allowed_price_cents,is_limited_edition,max_per_customer,created_at,updated_at) VALUES
 (1000,'Mechanical Keyboard','Mechanical keyboard',8900,20,NULL,NULL,0,NULL,'2026-01-01T00:00:00Z','2026-01-01T00:00:00Z'),
 (1001,'USB-C Hub','USB-C adapter hub',3900,15,NULL,NULL,0,NULL,'2026-01-01T00:00:00Z','2026-01-01T00:00:00Z'),
