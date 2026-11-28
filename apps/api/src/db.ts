@@ -55,9 +55,12 @@ export function initialize(force = false) {
   db.exec('BEGIN IMMEDIATE');
   try {
     for (const [id, formerEmail, newEmail] of [
-      [101, 'alice@nexora.example', 'alice@superinsecuretechstore.example'],
-      [102, 'bob@nexora.example', 'bob@superinsecuretechstore.example'],
-      [900, 'admin@nexora.example', 'admin@superinsecuretechstore.example'],
+      [101, 'alice@nexora.example', 'alice@tech-store.com'],
+      [101, 'alice@superinsecuretechstore.example', 'alice@tech-store.com'],
+      [102, 'bob@nexora.example', 'bob@tech-store.com'],
+      [102, 'bob@superinsecuretechstore.example', 'bob@tech-store.com'],
+      [900, 'admin@nexora.example', 'admin@tech-store.com'],
+      [900, 'admin@superinsecuretechstore.example', 'admin@tech-store.com'],
     ] as const) {
       db.prepare('UPDATE users SET email=? WHERE id=? AND email=?').run(newEmail,id,formerEmail);
     }
