@@ -49,6 +49,20 @@ export function initialize(force = false) {
     db.exec('BEGIN IMMEDIATE');
     try {db.exec(readFileSync(seedPath,'utf8'));db.exec('COMMIT');} catch(e) {db.exec('ROLLBACK');throw e;}
   }
+  // Rebrand only the three known demo accounts, preserving user IDs, password hashes,
+  // cart contents, orders, and all existing foreign-key relationships.
+  // Idempotent for persistent SQLite volumes initialized under the former brand.
+  db.exec('BEGIN IMMEDIATE');
+  try {
+    for (const [id, formerEmail, newEmail] of [
+      [101, 'alice@nexora.example', 'alice@superinsecuretechstore.example'],
+      [102, 'bob@nexora.example', 'bob@superinsecuretechstore.example'],
+      [900, 'admin@nexora.example', 'admin@superinsecuretechstore.example'],
+    ] as const) {
+      db.prepare('UPDATE users SET email=? WHERE id=? AND email=?').run(newEmail,id,formerEmail);
+    }
+    db.exec('COMMIT');
+  } catch(e) {db.exec('ROLLBACK');throw e;}
   // Upgrade existing databases without discarding paid/confirmed orders.
   const drafts=db.prepare("SELECT id,customer_id,created_at FROM orders WHERE status='draft'").all() as Array<{id:number;customer_id:number;created_at:string}>;
   for(const order of drafts){
