@@ -53,9 +53,9 @@ The deployment uses **one Docker Compose service/container** running multiple pr
 | [API07: Server Side Request Forgery](http://127.0.0.1:8090/challenges?api=api07) | An image importer requests a local internal training endpoint. |
 | [API08: Security Misconfiguration](http://127.0.0.1:8090/challenges?api=api08) | An invalid order identifier exposes verbose internal error details. |
 | [API09: Improper Inventory Management](http://127.0.0.1:8090/challenges?api=api09) | An undocumented experimental API version exposes orders without authentication. |
-| [API10: Unsafe Consumption of APIs](http://127.0.0.1:8090/challenges?api=api10) | Supplier synchronization accepts an improperly low price and renders stored HTML unsafely in the storefront. |
+| [API10: Unsafe Consumption of APIs](http://127.0.0.1:8090/challenges?api=api10) | A supplier-controlled product description executes JavaScript in the storefront after synchronization. |
 
-API10 contains **two distinct observable consequences** (price manipulation and stored XSS); there are ten OWASP categories, not eleven categories. The links above point to a **locally running instance**; replace `127.0.0.1` with the lab host's reachable IP if accessing from another VM.
+API10 focuses on **one Stored XSS scenario** caused by unsafe consumption of supplier data. Other supplier information, including prices, remains subject to business validation. The links above point to a **locally running instance**; replace `127.0.0.1` with the lab host's reachable IP if accessing from another VM.
 
 ## Requirements
 
