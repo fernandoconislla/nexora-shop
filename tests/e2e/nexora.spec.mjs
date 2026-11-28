@@ -28,20 +28,20 @@ test.describe('Super Insecure Tech Store browser regression — isolated lab',()
 
   test('new SVG shop isotypes load across storefront, welcome and challenges',async({page,request})=>{
     for(const icon of ['principal','negativo','app-movil']){
-      const response=await request.get(base+'/icons/nexora-isotipo-'+icon+'-roto.svg');
+      const response=await request.get(base+'/icons/super-insecure-tech-store-isotipo-'+icon+'-roto.svg');
       expect(response.status()).toBe(200);
       expect(response.headers()['content-type']).toContain('image/svg+xml');
       expect(await response.text()).toContain('clip-path="url(#fracture)"');
     }
     await page.goto('/');
-    await expect(page.locator('.welcome-brand img.mark')).toHaveAttribute('src','/icons/nexora-isotipo-principal-roto.svg');
-    await expect(page.locator('link[rel="icon"]')).toHaveAttribute('href','/icons/nexora-isotipo-app-movil-roto.svg');
+    await expect(page.locator('.welcome-brand img.mark')).toHaveAttribute('src','/icons/super-insecure-tech-store-isotipo-principal-roto.svg');
+    await expect(page.locator('link[rel="icon"]')).toHaveAttribute('href','/icons/super-insecure-tech-store-isotipo-app-movil-roto.svg');
     await page.goto('/shop');
-    await expect(page.locator('.shop-logo img.brand-icon')).toHaveAttribute('src','/icons/nexora-isotipo-negativo-roto.svg');
+    await expect(page.locator('.shop-logo img.brand-icon')).toHaveAttribute('src','/icons/super-insecure-tech-store-isotipo-negativo-roto.svg');
     await expect(page.locator('.shop-brand-name')).toHaveText('SUPER INSECURETECH STORE');
     await expect(page).toHaveTitle('Super Insecure Tech Store');
     await page.goto('/challenges');
-    await expect(page.locator('.challenge-brand img.challenge-brand-icon')).toHaveAttribute('src','/icons/nexora-isotipo-principal-roto.svg');
+    await expect(page.locator('.challenge-brand img.challenge-brand-icon')).toHaveAttribute('src','/icons/super-insecure-tech-store-isotipo-principal-roto.svg');
   });
 
   test('visitor cart survives login, checkout, order confirmation reload and history',async({page})=>{
