@@ -1,4 +1,4 @@
-// Controlled API4 validation on the local, isolated Nexora Shop stack.
+// Controlled API4 validation on the local, isolated Super Insecure Tech Store stack.
 // Baseline requests 10 products; test requests 1000. Maximum concurrency: 4.
 const base=process.env.NEXORA_BASE??'http://127.0.0.1:8090';
 const monitor=process.env.NEXORA_MONITOR??'http://127.0.0.1:8092';
