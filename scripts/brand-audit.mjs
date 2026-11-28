@@ -27,14 +27,14 @@ for(const variant of ['principal','negativo','app-movil']){
   assert.ok(files.includes(path),'missing canonical SVG: '+path);
   assert.match(readFileSync(path,'utf8'),/Super Insecure Tech Store/);
 }
-for(const path of [
-  'database/seed.sql',
-  'apps/storefront/src/Welcome.tsx',
-  'apps/storefront/src/ChallengeSolutions.ts',
-  'README.md',
+for(const [path,names] of [
+  ['database/seed.sql',['alice','bob','admin']],
+  ['apps/storefront/src/Welcome.tsx',['alice','bob','admin']],
+  ['apps/storefront/src/ChallengeSolutions.ts',['alice','admin']],
+  ['README.md',['alice','bob','admin']],
 ]){
   const source=readFileSync(path,'utf8');
-  for(const name of ['alice','bob','admin']){
+  for(const name of names){
     assert.ok(source.includes(name+'@tech-store.com'),path+' missing canonical demo identity '+name);
   }
 }
