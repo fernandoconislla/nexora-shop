@@ -30,7 +30,7 @@ async function run(){
  const invalidSync=await request('/api/v1/admin/integrations/supplier/sync',{method:'POST',token:admin});assert.equal(invalidSync.status,200);assert.equal(invalidSync.data.updated,0);
  assert.equal((await request('/api/v1/products/1100')).data.product.price,'1000.00');
  record('Control: supplier price below trusted minimum is rejected');
- const xss=await request('/supplier/products/SUP-1002',{origin:supplier,method:'PATCH',auth:'admin:admin',body:{description:'<img src=x onerror=alert(1)>'}});assert.equal(xss.status,200);
+ const xss=await request('/supplier/products/SUP-1002',{origin:supplier,method:'PATCH',auth:'admin:admin',body:{price:'79.99',description:'<img src=x onerror=alert(1)>'}});assert.equal(xss.status,200);
  const pending=await request('/api/v1/admin/integrations/supplier/pending',{token:admin});assert.equal(pending.status,200);
  assert.ok(pending.data.pending.some(p=>p.id==='SUP-1002'));
  const synced=await request('/api/v1/admin/integrations/supplier/sync',{method:'POST',token:admin});assert.equal(synced.status,200);assert.equal(synced.data.updated,1);
