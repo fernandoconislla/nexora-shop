@@ -89,7 +89,7 @@ test.describe('Super Insecure Tech Store browser regression — isolated lab',()
     await expect(page.getByRole('link',{name:'About this lab'})).toBeVisible();
     await page.getByRole('link',{name:'About this lab'}).click();
     await expect(page).toHaveURL(base+'/');
-    await expect(page.getByRole('heading',{name:'Explore. Test. Understand API Security.'})).toBeVisible();
+    await expect(page.getByRole('heading',{name:'Super Insecure Tech Store'})).toBeVisible();
   });
 
   test('invalid saved JWT produces a sign-in prompt instead of a cart failure',async({page})=>{
@@ -193,7 +193,7 @@ test.describe('Super Insecure Tech Store browser regression — isolated lab',()
 
   test('Navy and Green identity covers welcome page and guided challenges',async({page})=>{
     await page.goto('/');
-    await expect(page.getByRole('heading',{name:'Explore. Test. Understand API Security.'})).toBeVisible();
+    await expect(page.getByRole('heading',{name:'Super Insecure Tech Store'})).toBeVisible();
     const welcome=await page.evaluate(()=>({
       header:getComputedStyle(document.querySelector('.welcome-nav')).backgroundColor,
       cta:getComputedStyle(document.querySelector('.primary-cta')).backgroundColor,
