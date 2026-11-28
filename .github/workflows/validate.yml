@@ -1,11 +1,11 @@
-name: Validate Nexora Shop
+name: Validate Super Insecure Tech Store
 on:
   push:
     branches: [main]
   pull_request:
   workflow_dispatch:
 concurrency:
-  group: nexora-ci-${{ github.ref }}
+  group: sits-ci-${{ github.ref }}
   cancel-in-progress: true
 permissions:
   contents: read
@@ -52,24 +52,24 @@ jobs:
           set -euo pipefail
           test "$(docker compose ps -q | wc -l)" -eq 1
           docker compose ps
-          curl -fsS http://127.0.0.1:8092/ -o /tmp/nexora-monitor.html
-          curl -fsS http://127.0.0.1:8092/metrics -o /tmp/nexora-metrics.json
-          curl -fsS -L http://127.0.0.1:8091/ -o /tmp/nexora-supplier.html
-          grep -q 'Sign in' /tmp/nexora-supplier.html
+          curl -fsS http://127.0.0.1:8092/ -o /tmp/sits-monitor.html
+          curl -fsS http://127.0.0.1:8092/metrics -o /tmp/sits-metrics.json
+          curl -fsS -L http://127.0.0.1:8091/ -o /tmp/sits-supplier.html
+          grep -q 'Sign in' /tmp/sits-supplier.html
           test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8091/supplier/panel)" = 302
           curl -fsS -c /tmp/meridian-cookies.txt -H 'Content-Type: application/json' -d '{"username":"admin","password":"admin"}' http://127.0.0.1:8091/supplier/auth/login -o /tmp/meridian-login.json
           curl -fsS -b /tmp/meridian-cookies.txt http://127.0.0.1:8091/supplier/panel -o /tmp/meridian-panel.html
           grep -q 'Meridian Supply' /tmp/meridian-panel.html
           grep -q 'Image URL' /tmp/meridian-panel.html
           grep -q 'Price (USD)' /tmp/meridian-panel.html
-          curl -fsS http://127.0.0.1:8091/supplier/feed/products -o /tmp/nexora-supplier-feed.json
+          curl -fsS http://127.0.0.1:8091/supplier/feed/products -o /tmp/sits-supplier-feed.json
       - name: HTTP smoke tests
         run: |
           set -euo pipefail
           curl -fsS http://127.0.0.1:8090/api/health
           curl -fsS http://127.0.0.1:8090/api/v1/products
-          curl -fsS http://127.0.0.1:8090/api/openapi.json -o /tmp/nexora-openapi.json
-          curl -fsS http://127.0.0.1:8090/api/docs -o /tmp/nexora-swagger.html
+          curl -fsS http://127.0.0.1:8090/api/openapi.json -o /tmp/sits-openapi.json
+          curl -fsS http://127.0.0.1:8090/api/docs -o /tmp/sits-swagger.html
       - name: Verify ten OWASP API lab scenarios over HTTP
         run: node scripts/smoke.mjs
       - name: Verify persistent data after container restart
@@ -100,7 +100,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: nexora-browser-diagnostics
+          name: sits-browser-diagnostics
           path: |
             test-results/
             playwright-report/
