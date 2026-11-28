@@ -1,6 +1,6 @@
 :root{font-family:Inter,system-ui,Arial,sans-serif;color:#202a39;background:#f6f8fb}*{box-sizing:border-box}body{margin:0}header{background:#0c182a;color:white;padding:21px max(24px,calc((100vw - 1200px)/2));display:flex;align-items:center;justify-content:space-between;gap:24px}header strong{font-size:23px;letter-spacing:1px}header span{color:#67d4e9}nav{display:flex;flex-wrap:wrap;gap:8px}button{background:#116b88;color:#fff;border:0;padding:10px 15px;border-radius:7px;cursor:pointer;font-weight:650}nav button{background:#20334a}button:hover{filter:brightness(1.12)}button:disabled{opacity:.5;cursor:not-allowed}main{max-width:1200px;min-height:70vh;margin:auto;padding:30px 20px}.intro{padding:16px 0 28px}.intro small,.body small{letter-spacing:2px;color:#718096}.intro h1{font-size:40px;margin:8px 0}.intro p{color:#69798b}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}.product,.panel{background:white;border:1px solid #dce5ee;border-radius:12px;overflow:hidden;box-shadow:0 5px 20px #142b420b}.placeholder{height:155px;background:linear-gradient(135deg,#e4edf6,#b9cadb);display:grid;place-items:center;color:#3c6e8a;font-size:65px}.body{padding:20px}.body h2{margin:9px 0;font-size:20px}.body p{color:#667389;line-height:1.5;min-height:42px}.bottom{display:flex;justify-content:space-between;align-items:center;margin:20px 0}.bottom b{font-size:21px}.bottom span{color:#758699;font-size:13px}.limited{font-size:13px;color:#966722!important;min-height:0!important}.panel{max-width:800px;margin:28px auto;padding:32px}.panel article{border-top:1px solid #e2e8ef;padding:16px 0}.panel form{display:flex;flex-direction:column;gap:18px;max-width:360px}label{display:flex;flex-direction:column;gap:8px}input{font:inherit;border:1px solid #b9c5d1;padding:12px;border-radius:8px}.error{padding:14px;background:#ffeded;color:#922d31;border-radius:8px}footer{padding:26px;text-align:center;background:#e7edf3;color:#64748b}a{color:#116b88}@media(max-width:620px){header{align-items:flex-start;flex-direction:column}.intro h1{font-size:30px}}
 
-/* Nexora visual system: commercial storefront and separate onboarding */
+/* Super Insecure Tech Store visual system: commercial storefront and separate onboarding */
 :root{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#16263b;background:#f8fafc;font-synthesis:none}
 button,input{font:inherit}button{transition:background .18s ease,transform .18s ease,box-shadow .18s ease}button:active{transform:translateY(1px)}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #70b5e0;outline-offset:3px}button:hover{filter:none;background:#095978}
 header{background:white;color:#16283c;border-bottom:1px solid #e5ecf1;box-shadow:0 1px 10px #18283f08;padding:18px max(24px,calc((100vw - 1200px)/2));position:sticky;top:0;z-index:10}
@@ -47,7 +47,7 @@ main{padding-top:30px;padding-bottom:68px;min-height:76vh}
 
 .editor-image-preview iframe{display:block;width:100%;height:100%;min-height:260px;background:white}.import-error-preview{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;padding:24px;text-align:center;gap:10px;color:#922d2d}.import-error-preview strong{font-size:17px}.import-error-preview p{margin:0;overflow-wrap:anywhere;max-width:100%;color:#922d2d}
 
-/* Purchase history — consistent with Nexora account cards */
+/* Purchase history — consistent with Super Insecure Tech Store account cards */
 .order-dashboard .orders-intro{margin:0 0 22px;color:#718399;font-size:14px}
 .order-dashboard .order-card{padding:23px 25px;margin:0 0 14px;border:1px solid #dfebf1;border-radius:14px;background:#f8fbfd;box-shadow:0 3px 12px rgba(20,52,72,.035)}
 .order-dashboard .order-card .order-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:25px}
@@ -283,7 +283,7 @@ main{padding-top:30px;padding-bottom:68px;min-height:76vh}
 @media(max-width:760px){.resource-history-grid{grid-template-columns:1fr}}
 
 
-/* Nexora Shop / Commercial identity system 2026.
+/* Super Insecure Tech Store / Commercial identity system 2026.
    Style only; intentional OWASP API training behavior is unchanged. */
 :root{
   --nx-navy:#0d2538;
@@ -488,7 +488,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .shop-header .nav-cart-count{color:var(--nx-green-bright);font-weight:850}
 
 
-/* Nexora Shop / Identity consolidation
+/* Super Insecure Tech Store / Identity consolidation
    Keep feedback semantics (red errors, amber warnings) distinct from brand green. */
 :root{
   --nx-green-tint:#e9f7ee;
@@ -849,7 +849,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 }
 
 
-/* Nexora Shop identity: SVG isotype assets, no provisional letter tiles. */
+/* Super Insecure Tech Store identity: SVG isotype assets, no provisional letter tiles. */
 .shop-header .shop-logo img.brand-icon{
   display:block;flex:0 0 auto;width:40px;height:40px;
   padding:0;margin-right:4px;border:0;border-radius:0;
