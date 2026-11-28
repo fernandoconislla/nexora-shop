@@ -14,8 +14,8 @@ test('persistent pre-rebrand SQLite data migrates without losing student changes
     const old=new DatabaseSync(dbFile);
     old.exec(readFileSync('database/schema.sql','utf8'));
     old.exec(readFileSync('database/seed.sql','utf8'));
-    for(const name of ['alice','bob','admin']){
-      old.prepare('UPDATE users SET email=? WHERE email=?').run(name+'@nexora.example',name+'@superinsecuretechstore.example');
+    for(const [name,priorDomain] of [['alice','nexora.example'],['bob','superinsecuretechstore.example'],['admin','superinsecuretechstore.example']]){
+      old.prepare('UPDATE users SET email=? WHERE email=?').run(name+'@'+priorDomain,name+'@tech-store.com');
     }
     const insert=old.prepare("INSERT INTO products(id,name,description,price_cents,stock,is_limited_edition,created_at,updated_at) VALUES(?,?,?,?,?,0,'2026-01-01','2026-01-01')");
     insert.run(2000,'Legacy Keyboard','Nexora mechanical keyboard for everyday work. Model 0001.',2200,17);
@@ -27,9 +27,9 @@ test('persistent pre-rebrand SQLite data migrates without losing student changes
     const {initialize}=await import('../dist/db.js?rebrand-migration-regression');
     let db=initialize();
     assert.equal(db.prepare('SELECT COUNT(*) AS n FROM users').get().n,3);
-    assert.equal(db.prepare('SELECT email FROM users WHERE id=101').get().email,'alice@superinsecuretechstore.example');
-    assert.equal(db.prepare('SELECT email FROM users WHERE id=102').get().email,'bob@superinsecuretechstore.example');
-    assert.equal(db.prepare('SELECT email FROM users WHERE id=900').get().email,'admin@superinsecuretechstore.example');
+    assert.equal(db.prepare('SELECT email FROM users WHERE id=101').get().email,'alice@tech-store.com');
+    assert.equal(db.prepare('SELECT email FROM users WHERE id=102').get().email,'bob@tech-store.com');
+    assert.equal(db.prepare('SELECT email FROM users WHERE id=900').get().email,'admin@tech-store.com');
     assert.equal(db.prepare('SELECT COUNT(*) AS n FROM orders').get().n,2);
     assert.equal(db.prepare('SELECT quantity FROM cart_items WHERE id=8001').get().quantity,4);
     assert.equal(db.prepare('SELECT stock FROM products WHERE id=2000').get().stock,17);
@@ -39,7 +39,7 @@ test('persistent pre-rebrand SQLite data migrates without losing student changes
     db.close();
 
     db=initialize();
-    assert.equal(db.prepare('SELECT COUNT(*) AS n FROM users WHERE email LIKE ?').get('%@superinsecuretechstore.example').n,3);
+    assert.equal(db.prepare('SELECT COUNT(*) AS n FROM users WHERE email LIKE ?').get('%@tech-store.com').n,3);
     assert.equal(db.prepare('SELECT quantity FROM cart_items WHERE id=8001').get().quantity,4);
     assert.equal(db.prepare('SELECT description FROM products WHERE id=2000').get().description,'Super Insecure Tech Store mechanical keyboard for everyday work. Model 0001.');
     db.close();
