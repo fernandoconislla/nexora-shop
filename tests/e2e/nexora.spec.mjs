@@ -74,7 +74,26 @@ test.describe('Super Insecure Tech Store browser regression — isolated lab',()
     await page.goto('/shop');
     await expect(page.locator('.shop-brand-name')).toHaveText('SUPER INSECURETECH STORE');
     await page.goto('/challenges');
-    await expect(page.locator('.challenge-brand-name')).toHaveText('SUPER INSECURETECH STORE');
+    await expect(page.locator('.challenge-brand-name strong')).toHaveText('SUPER INSECURE');
+    await expect(page.locator('.challenge-brand-name > b')).toHaveText('TECH STORE');
+    await expect(page.locator('.challenge-brand-name small')).toHaveText('OWASP API SECURITY LAB');
+  });
+
+  test('brand headers stay readable without text overlap at narrow viewport',async({page})=>{
+    await page.setViewportSize({width:379,height:760});
+    await page.goto('/');
+    const welcomeWordmark=page.locator('.welcome-brand-name strong');
+    await expect(welcomeWordmark).toBeVisible();
+    expect(await welcomeWordmark.evaluate(el=>getComputedStyle(el).color)).toBe('rgb(255, 255, 255)');
+    await page.goto('/challenges');
+    const icon=await page.locator('.challenge-brand-icon').boundingBox();
+    const name=await page.locator('.challenge-brand-name').boundingBox();
+    expect(icon).not.toBeNull();
+    expect(name).not.toBeNull();
+    expect(name.width).toBeGreaterThan(100);
+    expect(name.x).toBeGreaterThanOrEqual(icon.x+icon.width-1);
+    await expect(page.locator('.challenge-brand-name small')).toBeVisible();
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(379);
   });
 
   test('new SVG shop isotypes load across storefront, welcome and challenges',async({page,request})=>{
