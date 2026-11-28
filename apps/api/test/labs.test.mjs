@@ -8,3 +8,14 @@ test('API1 reproduces authenticated cross-customer read',()=>{const db=fixture()
 test('API1 does not permit an absent identity',()=>{const db=fixture();assert.equal(labReadOrder(db,5002,0),null);db.close()});
 test('API5 reproduces customer stock edit with trusted auth identity',()=>{const db=fixture();const result=labUpdateProduct(db,1000,{stock:50},101);assert.equal(result.status,200);assert.equal(db.prepare('SELECT stock FROM products WHERE id=1000').get().stock,50);db.close()});
 test('API5 rejects missing identity and invalid stock',()=>{const db=fixture();assert.equal(labUpdateProduct(db,1000,{stock:50},0).status,401);assert.equal(labUpdateProduct(db,1000,{stock:-1},101).status,422);db.close()});
+
+test('all ten learning objectives present an investigation, not exploitation instructions',()=>{
+ const source=readFileSync('apps/storefront/src/Challenges.tsx','utf8');
+ const objectives=[...source.matchAll(/\{id:'api\d\d',title:'[^']+',objective:'((?:\\.|[^'\\])*)',context:/g)].map(match=>match[1]);
+ assert.equal(objectives.length,10);
+ for(const objective of objectives){
+   assert.match(objective,/\?$/);
+   assert.match(objective,/(Would it be possible|Could an overlooked|Could manipulated)/);
+   assert.doesNotMatch(objective,/^(Sign in|Open |Explore |Capture |Change |Repeat |Inspect |Modify )/);
+ }
+});
