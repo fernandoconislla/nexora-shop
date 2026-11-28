@@ -3,7 +3,7 @@ export type SupplierProduct={id:string;name:string;price_cents:number;descriptio
 export function pendingSupplierProducts(db:DatabaseSync,feed:SupplierProduct[]){
  return feed.filter(p=>{const sync=db.prepare('SELECT source_version FROM product_sync_state WHERE supplier_product_id=?').get(p.id) as {source_version:number}|undefined;return sync!==undefined&&p.version>sync.source_version});
 }
-// API10 lab: supplier data is blindly trusted. No internal price-floor check or HTML sanitization.
+// API10 lab: stored XSS via supplier-controlled descriptions. Prices still obey trusted internal floors.
 export function importSupplierProducts(db:DatabaseSync,feed:SupplierProduct[]){
  const pending=pendingSupplierProducts(db,feed),details:SupplierProduct[]=[];
  for(const p of pending){
@@ -12,6 +12,8 @@ export function importSupplierProducts(db:DatabaseSync,feed:SupplierProduct[]){
   try{
    const state=db.prepare('SELECT product_id FROM product_sync_state WHERE supplier_product_id=? AND source_version<?').get(p.id,p.version) as {product_id:number}|undefined;
    if(!state){db.exec('ROLLBACK');continue}
+   const trusted=db.prepare('SELECT min_allowed_price_cents FROM products WHERE id=?').get(state.product_id) as {min_allowed_price_cents:number|null}|undefined;
+   if(!trusted || (trusted.min_allowed_price_cents!==null && p.price_cents<trusted.min_allowed_price_cents)){db.exec('ROLLBACK');continue}
    db.prepare('UPDATE products SET price_cents=?, description=?, image_path=COALESCE(?,image_path), updated_at=? WHERE id=?').run(p.price_cents,p.description,p.image_url??null,new Date().toISOString(),state.product_id);
    db.prepare('UPDATE product_sync_state SET source_version=?,source_updated_at=? WHERE product_id=?').run(p.version,p.updated_at,state.product_id);
    db.exec('COMMIT');details.push(p);

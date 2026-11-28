@@ -217,12 +217,14 @@ test.describe('Super Insecure Tech Store browser regression — isolated lab',()
   test('Reset Lab Data restores supplier and store product changes',async({page,request})=>{
     const changed=await request.patch(supplier+'/supplier/products/SUP-1001',{
       headers:{authorization:'Basic '+Buffer.from('admin:admin').toString('base64')},
-      data:{price:'1.00',description:'Changed for reset browser test'}
+      data:{price:'900.00',description:'Changed for reset browser test'}
     });
     expect(changed.status()).toBe(200);
     const token=await bearer(request);
     const sync=await request.post(base+'/api/v1/admin/integrations/supplier/sync',{headers:{authorization:'Bearer '+token}});
     expect(sync.status()).toBe(200);
+    const beforeReset=await request.get(base+'/api/v1/products/1100');
+    expect((await beforeReset.json()).product.price).toBe('900.00');
     await page.goto('/');
     await page.getByRole('button',{name:'Reset Lab Data'}).click();
     await page.getByLabel('Administrator password').fill(admin.password);

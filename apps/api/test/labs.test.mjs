@@ -15,7 +15,7 @@ test('all ten learning objectives present an investigation, not exploitation ins
  assert.equal(objectives.length,10);
  for(const objective of objectives){
    assert.match(objective,/\?$/);
-   assert.match(objective,/(Would it be possible|Could an overlooked|Could manipulated)/);
+   assert.match(objective,/(Would it be possible|Could an overlooked|Could manipulated|Could malicious JavaScript)/);
    assert.doesNotMatch(objective,/^(Sign in|Open |Explore |Capture |Change |Repeat |Inspect |Modify )/);
  }
 });
