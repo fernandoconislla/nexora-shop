@@ -64,7 +64,7 @@ const money=(value:string|number)=>typeof value==='string'&&usdPattern.test(valu
 type GuestLine={product_id:number;quantity:number};
 const guestKey='nexora-guest-cart-v1';
 const authKey='nexora-tab-auth-v1';
-function readTabAuth():{account:Account|null;token:string}{try{const saved=JSON.parse(sessionStorage.getItem(authKey)??'null');if(saved&&typeof saved.token==='string'&&saved.token&&saved.account&&['customer','admin'].includes(saved.account.role))return {account:saved.account,token:saved.token}}catch{}return {account:null,token:''}}
+function readTabAuth():{account:Account|null;token:string}{try{const saved=JSON.parse(sessionStorage.getItem(authKey)??'null');if(saved&&typeof saved.token==='string'&&saved.token&&saved.account&&['customer','admin'].includes(saved.account.role)){const account=saved.account as Account;const demoIds:Record<number,string>={101:'alice',102:'bob',900:'admin'};const demoName=demoIds[account.id];if(demoName&&[demoName+'@nexora.example',demoName+'@superinsecuretechstore.example'].includes(account.email)){account.email=demoName+'@tech-store.com';sessionStorage.setItem(authKey,JSON.stringify({account,token:saved.token}))}return {account,token:saved.token}}}catch{}return {account:null,token:''}}
 const tabAuth=readTabAuth();
 function readGuest():GuestLine[]{try{const data=JSON.parse(localStorage.getItem(guestKey)??'[]');return Array.isArray(data)?data.filter(x=>Number.isSafeInteger(x.product_id)&&Number.isSafeInteger(x.quantity)&&x.quantity>=1&&x.quantity<=100):[]}catch{return []}}
 function ResourceMonitor({token}:{token:string}){
