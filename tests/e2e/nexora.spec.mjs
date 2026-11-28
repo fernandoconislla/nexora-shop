@@ -74,7 +74,9 @@ test.describe('Super Insecure Tech Store browser regression — isolated lab',()
     await page.goto('/shop');
     await expect(page.locator('.shop-brand-name')).toHaveText('SUPER INSECURETECH STORE');
     await page.goto('/challenges');
-    await expect(page.locator('.challenge-brand-name')).toHaveText('SUPER INSECURETECH STORE');
+    await expect(page.locator('.challenge-brand-name strong')).toHaveText('SUPER INSECURE');
+    await expect(page.locator('.challenge-brand-name > b')).toHaveText('TECH STORE');
+    await expect(page.locator('.challenge-brand-name small')).toHaveText('OWASP API SECURITY LAB');
   });
 
   test('new SVG shop isotypes load across storefront, welcome and challenges',async({page,request})=>{
