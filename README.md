@@ -1,10 +1,10 @@
-# Nexora Shop
+# Super Insecure Tech Store
 
 **OWASP API Security Top 10:2023 — Intentionally Vulnerable E-Commerce Application**
 
-[![Validate Nexora Shop](https://github.com/fernandoconislla/nexora-shop/actions/workflows/validate.yml/badge.svg)](https://github.com/fernandoconislla/nexora-shop/actions/workflows/validate.yml)
+[![Validate Super Insecure Tech Store](https://github.com/fernandoconislla/nexora-shop/actions/workflows/validate.yml/badge.svg)](https://github.com/fernandoconislla/nexora-shop/actions/workflows/validate.yml)
 
-Nexora Shop is a realistic, fictional online store built for hands-on **API security testing**. Explore customer accounts, shopping carts, orders, administrator functions, and a separate supplier portal while investigating **all ten categories of the OWASP API Security Top 10:2023**.
+Super Insecure Tech Store is a realistic, fictional online store built for hands-on **API security testing**. Explore customer accounts, shopping carts, orders, administrator functions, and a separate supplier portal while investigating **all ten categories of the OWASP API Security Top 10:2023**.
 
 > [!WARNING]
 > **Intentionally vulnerable software.** Deploy **only in an isolated, authorized training environment**. The default Docker Compose configuration publishes ports **8090, 8091, and 8092 on all host interfaces**. Do not expose them to the Internet or use real identities, passwords, payment cards, or business data. Some vulnerabilities deliberately bypass access controls or execute stored HTML.
@@ -25,7 +25,7 @@ Nexora Shop is a realistic, fictional online store built for hands-on **API secu
 
 ## Overview
 
-The application models an e-commerce workflow with **Nexora Shop** (customers, cart, checkout, order history, administration) and **Meridian Supply** (an independently managed fictional supplier). It includes a local internal HTTP target for SSRF training, REST API documentation, and a Resource Monitor.
+The application models an e-commerce workflow with **Super Insecure Tech Store** (customers, cart, checkout, order history, administration) and **Meridian Supply** (an independently managed fictional supplier). It includes a local internal HTTP target for SSRF training, REST API documentation, and a Resource Monitor.
 
 The deployment uses **one Docker Compose service/container** running multiple processes (Node.js API, React storefront via Nginx, supplier portal, internal target, and monitoring). It persists store and supplier state in separate named Docker volumes. The checkout uses simulated payments only.
 
@@ -147,7 +147,7 @@ This localhost option prevents direct access from another physical host or VM vi
 | Component | Local address | Notes |
 | --- | --- | --- |
 | Lab overview | http://127.0.0.1:8090/ | Access instructions, accounts, challenges and reset |
-| Nexora Shop | http://127.0.0.1:8090/shop | Customer storefront |
+| Super Insecure Tech Store | http://127.0.0.1:8090/shop | Customer storefront |
 | Security Challenges | http://127.0.0.1:8090/challenges | Ten guided OWASP scenarios |
 | Shop Admin | http://127.0.0.1:8090/products/manage | Admin login required |
 | Resource Monitor | http://127.0.0.1:8090/monitor | Integrated admin-authenticated monitoring |
@@ -163,9 +163,9 @@ All accounts and products are **fictional**. The supplier account is independent
 
 | Service | Role | Username / email | Password |
 | --- | --- | --- | --- |
-| Nexora Shop | Alice (customer) | `alice@nexora.example` | `AliceDemo!2026` |
-| Nexora Shop | Bob (customer) | `bob@nexora.example` | `BobDemo!2026` |
-| Nexora Shop | Shop Admin | `admin@nexora.example` | `AdminDemo!2026` |
+| Super Insecure Tech Store | Alice (customer) | `alice@nexora.example` | `AliceDemo!2026` |
+| Super Insecure Tech Store | Bob (customer) | `bob@nexora.example` | `BobDemo!2026` |
+| Super Insecure Tech Store | Shop Admin | `admin@nexora.example` | `AdminDemo!2026` |
 | Meridian Supply | Supplier administrator | `admin` | `admin` |
 
 Do not reuse these credentials anywhere else.
@@ -198,7 +198,7 @@ For a **non-destructive-infrastructure, but destructive-to-lab-state** reset, go
 
 - **`docker: command not found` / Compose missing:** install Docker and Compose v2; check `docker compose version`.
 - **Cannot connect to Docker daemon:** start Docker Engine/Desktop; on Linux, inspect socket permissions.
-- **Port already allocated (8090/8091/8092):** identify and stop the conflicting process before starting Nexora Shop.
+- **Port already allocated (8090/8091/8092):** identify and stop the conflicting process before starting Super Insecure Tech Store.
 - **Container exits or fails health check:** run `docker compose ps` and `docker compose logs --tail=100 nexora`.
 - **Cannot access from another VM:** verify the host's IP, VM network mode, host firewall, and published bindings; do not replace the remote IP with `localhost`.
 - **Scenarios show unexpected orders/stock/prices:** the lab is stateful; use Reset Lab Data to return to the seeded state.
