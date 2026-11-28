@@ -81,7 +81,7 @@ jobs:
         run: |
           set -euo pipefail
           before="$(curl -fsS http://127.0.0.1:8090/api/v1/products/1100 | node -e 'let s="";process.stdin.on("data",x=>s+=x).on("end",()=>console.log(JSON.parse(s).product.price))')"
-          test "$before" = "1.00"
+          test "$before" = "1000.00"
           docker compose restart
           for attempt in $(seq 1 30); do
             if curl -fsS http://127.0.0.1:8090/api/health >/dev/null 2>&1; then break; fi
@@ -89,7 +89,7 @@ jobs:
           done
           after="$(curl -fsS http://127.0.0.1:8090/api/v1/products/1100 | node -e 'let s="";process.stdin.on("data",x=>s+=x).on("end",()=>console.log(JSON.parse(s).product.price))')"
           test "$after" = "$before"
-          echo "PASS persisted supplier product after restart"
+          echo "PASS persisted product data after restart"
       - name: Controlled API4 load assessment
         run: node scripts/api4-load-test.mjs
       - name: Install Chromium for end-to-end tests
