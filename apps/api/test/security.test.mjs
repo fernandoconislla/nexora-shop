@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-const dir=mkdtempSync(join(tmpdir(),'nexora-auth-'));
+const dir=mkdtempSync(join(tmpdir(),'sits-auth-'));
 process.env.JWT_SECRET_FILE=join(dir,'secret');
 const {issueToken,verifyToken,validatePassword}=await import('../src/security.ts');
 test.after(()=>rmSync(dir,{recursive:true,force:true}));
