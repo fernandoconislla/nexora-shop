@@ -55,3 +55,14 @@ test('missing guest product is visible and checkout is blocked',()=>{
  assert.match(src,/\(unavailable\)/);
  assert.match(src,/disabled=\{visibleCart\.items\.some\(i=>i\.stock===0\)\}/);
 });
+
+test('welcome and challenge headers retain a visible, vertically stacked brand',()=>{
+ const welcome=readFileSync('apps/storefront/src/Welcome.tsx','utf8');
+ const challenge=readFileSync('apps/storefront/src/Challenges.tsx','utf8');
+ const css=readFileSync('apps/storefront/src/style.css','utf8');
+ assert.match(welcome,/className="welcome-brand-name"><strong>SUPER INSECURE<\/strong><b>TECH STORE<\/b><small>OWASP API SECURITY LAB<\/small>/);
+ assert.match(challenge,/className="challenge-brand-name"><strong>SUPER INSECURE<\/strong><b>TECH STORE<\/b><small>OWASP API SECURITY LAB<\/small><\/span>/);
+ assert.match(css,/\.welcome-guide \.welcome-brand \.welcome-brand-name strong\{color:#fff\}/);
+ assert.match(css,/\.challenge-header \.challenge-brand > \.challenge-brand-name\{[\s\S]*?width:auto;height:auto;/);
+ assert.match(css,/\.challenge-header \.challenge-brand \.challenge-brand-name small\{[\s\S]*?display:block;/);
+});
