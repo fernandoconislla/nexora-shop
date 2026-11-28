@@ -26,6 +26,27 @@ async function bearer(request,credentials=admin){
 test.describe('Super Insecure Tech Store browser regression — isolated lab',()=>{
   test.beforeEach(async({request})=>{await reset(request)});
 
+  test('rebrand is consistent across API, generated catalog, monitoring and pages',async({page,request})=>{
+    const health=await request.get(base+'/api/health');
+    expect(health.ok()).toBe(true);
+    expect((await health.json()).application).toBe('Super Insecure Tech Store');
+    const openapi=await request.get(base+'/api/openapi.json');
+    expect(openapi.ok()).toBe(true);
+    expect((await openapi.json()).info.title).toBe('Super Insecure Tech Store API');
+    const generated=await request.get(base+'/api/v1/products/2000');
+    expect(generated.ok()).toBe(true);
+    expect((await generated.json()).product.description).toMatch(/^Super Insecure Tech Store /);
+    const monitor=await request.get((process.env.NEXORA_MONITOR??'http://127.0.0.1:8092')+'/');
+    expect(monitor.ok()).toBe(true);
+    expect(await monitor.text()).toContain('SUPER INSECURE TECH STORE / PERFORMANCE');
+    await page.goto('/');
+    await expect(page.locator('h1')).toHaveText('Super Insecure Tech Store');
+    await page.goto('/shop');
+    await expect(page.locator('.shop-brand-name')).toHaveText('SUPER INSECURETECH STORE');
+    await page.goto('/challenges');
+    await expect(page.locator('.challenge-brand-name')).toHaveText('SUPER INSECURETECH STORE');
+  });
+
   test('new SVG shop isotypes load across storefront, welcome and challenges',async({page,request})=>{
     for(const icon of ['principal','negativo','app-movil']){
       const response=await request.get(base+'/icons/super-insecure-tech-store-isotipo-'+icon+'-roto.svg');
