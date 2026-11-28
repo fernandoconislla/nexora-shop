@@ -23,6 +23,8 @@ for(const path of relevant){
   }
 }
 for(const variant of ['principal','negativo','app-movil']){
+  const legacyPath='apps/storefront/public/icons/nexora-isotipo-'+variant+'-roto.svg';
+  assert.ok(!files.includes(legacyPath),'obsolete branding asset still tracked: '+legacyPath);
   const path='apps/storefront/public/icons/super-insecure-tech-store-isotipo-'+variant+'-roto.svg';
   assert.ok(files.includes(path),'missing canonical SVG: '+path);
   assert.match(readFileSync(path,'utf8'),/Super Insecure Tech Store/);
