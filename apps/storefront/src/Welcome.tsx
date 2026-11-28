@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-const accounts=[['Alice Morgan','Customer','alice@nexora.example','AliceDemo!2026'],['Bob Wilson','Customer','bob@nexora.example','BobDemo!2026'],['Shop Admin','Administrator','admin@nexora.example','AdminDemo!2026']];
+const accounts=[['Alice Morgan','Customer','alice@superinsecuretechstore.example','AliceDemo!2026'],['Bob Wilson','Customer','bob@superinsecuretechstore.example','BobDemo!2026'],['Shop Admin','Administrator','admin@superinsecuretechstore.example','AdminDemo!2026']];
 const challenges=[
 ['API01','Broken Object Level Authorization','Check whether the API allows access to orders belonging to another customer.'],
 ['API02','Broken Authentication','See how the API verifies identity when using authentication tokens.'],
@@ -14,7 +14,7 @@ const challenges=[
 ];
 export default function Welcome({enter}:{enter:()=>void}){
  const [resetOpen,setResetOpen]=useState(false);
- const [email,setEmail]=useState('admin@nexora.example');
+ const [email,setEmail]=useState('admin@superinsecuretechstore.example');
  const [password,setPassword]=useState('');
  const [confirmation,setConfirmation]=useState('');
  const [busy,setBusy]=useState(false);
