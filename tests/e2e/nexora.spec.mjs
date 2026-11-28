@@ -26,6 +26,36 @@ async function bearer(request,credentials=admin){
 test.describe('Super Insecure Tech Store browser regression — isolated lab',()=>{
   test.beforeEach(async({request})=>{await reset(request)});
 
+  test('presentation, login and API docs use only the three tech-store.com demo emails',async({page,request})=>{
+    await page.goto('/');
+    const credentials=page.locator('.guide-account');
+    await expect(credentials).toHaveCount(3);
+    for(const email of ['alice@tech-store.com','bob@tech-store.com','admin@tech-store.com']){
+      await expect(credentials.getByText(email,{exact:true})).toBeVisible();
+    }
+    await expect(page.locator('body')).not.toContainText(/@(nexora\\.example|superinsecuretechstore\\.example)/);
+    await page.getByRole('button',{name:/Reset lab data/i}).click();
+    await expect(page.getByLabel('Administrator email')).toHaveValue('admin@tech-store.com');
+    await page.goto('/login');
+    await expect(page.getByLabel('Email')).toHaveValue('alice@tech-store.com');
+    const openapi=await (await request.get(base+'/api/openapi.json')).text();
+    expect(openapi).toContain('alice@tech-store.com');
+    expect(openapi).not.toMatch(/@(nexora\\.example|superinsecuretechstore\\.example)/);
+  });
+
+  test('stored legacy session profile email is normalized without invalidating a valid JWT',async({page,request})=>{
+    const token=await bearer(request,alice);
+    for(const formerDomain of ['nexora.example','superinsecuretechstore.example']){
+      await page.goto('/shop');
+      await page.evaluate(({email,token})=>{
+        sessionStorage.setItem('nexora-tab-auth-v1',JSON.stringify({account:{id:101,email,display_name:'Alice Morgan',role:'customer'},token}));
+      },{email:'alice@'+formerDomain,token});
+      await page.reload();
+      await expect.poll(()=>page.evaluate(()=>JSON.parse(sessionStorage.getItem('nexora-tab-auth-v1')).account.email)).toBe('alice@tech-store.com');
+      await expect(page.getByRole('button',{name:/Alice/})).toBeVisible();
+    }
+  });
+
   test('rebrand is consistent across API, generated catalog, monitoring and pages',async({page,request})=>{
     const health=await request.get(base+'/api/health');
     expect(health.ok()).toBe(true);
