@@ -31,9 +31,9 @@ app.get('/api/internal/metrics',c=>{
  lastCpu=current;lastSample=process.hrtime.bigint();
  return c.json({cpu_percent:elapsed>0?Math.round(used/elapsed*10000)/100:0,ram_mb:Math.round(process.memoryUsage().rss/1048576*100)/100});
 });
-app.get('/api/health',c=>c.json({status:'ok',application:'Nexora Shop'}));
+app.get('/api/health',c=>c.json({status:'ok',application:'Super Insecure Tech Store'}));
 app.get('/api/openapi.json',c=>c.json(openApiSpec));
-app.get('/api/docs',c=>c.html('<!doctype html><html><head><title>Nexora Shop API</title><link rel="stylesheet" href="/api/docs/swagger-ui.css"></head><body><div id="swagger-ui"></div><script src="/api/docs/swagger-ui-bundle.js"></script><script>SwaggerUIBundle({url:"/api/openapi.json",dom_id:"#swagger-ui"})</script></body></html>'));
+app.get('/api/docs',c=>c.html('<!doctype html><html><head><title>Super Insecure Tech Store API</title><link rel="stylesheet" href="/api/docs/swagger-ui.css"></head><body><div id="swagger-ui"></div><script src="/api/docs/swagger-ui-bundle.js"></script><script>SwaggerUIBundle({url:"/api/openapi.json",dom_id:"#swagger-ui"})</script></body></html>'));
 for(const asset of ['swagger-ui.css','swagger-ui-bundle.js'])app.get('/api/docs/'+asset,c=>{c.header('Content-Type',asset.endsWith('.css')?'text/css':'application/javascript');return c.body(new Uint8Array(readFileSync(swaggerRoot+asset)))});
 app.post('/api/v1/auth/login',async c=>{
  const b=await parseBody(c);if(!b||typeof b.email!=='string'||typeof b.password!=='string')return c.json({error:'Invalid credentials'},401);
