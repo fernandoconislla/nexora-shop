@@ -163,9 +163,9 @@ All accounts and products are **fictional**. The supplier account is independent
 
 | Service | Role | Username / email | Password |
 | --- | --- | --- | --- |
-| Super Insecure Tech Store | Alice (customer) | `alice@nexora.example` | `AliceDemo!2026` |
-| Super Insecure Tech Store | Bob (customer) | `bob@nexora.example` | `BobDemo!2026` |
-| Super Insecure Tech Store | Shop Admin | `admin@nexora.example` | `AdminDemo!2026` |
+| Super Insecure Tech Store | Alice (customer) | `alice@superinsecuretechstore.example` | `AliceDemo!2026` |
+| Super Insecure Tech Store | Bob (customer) | `bob@superinsecuretechstore.example` | `BobDemo!2026` |
+| Super Insecure Tech Store | Shop Admin | `admin@superinsecuretechstore.example` | `AdminDemo!2026` |
 | Meridian Supply | Supplier administrator | `admin` | `admin` |
 
 Do not reuse these credentials anywhere else.
