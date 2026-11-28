@@ -23,7 +23,7 @@ async function bearer(request,credentials=admin){
   return (await response.json()).access_token;
 }
 
-test.describe('Nexora Shop browser regression — isolated lab',()=>{
+test.describe('Super Insecure Tech Store browser regression — isolated lab',()=>{
   test.beforeEach(async({request})=>{await reset(request)});
 
   test('new SVG shop isotypes load across storefront, welcome and challenges',async({page,request})=>{
@@ -38,6 +38,8 @@ test.describe('Nexora Shop browser regression — isolated lab',()=>{
     await expect(page.locator('link[rel="icon"]')).toHaveAttribute('href','/icons/nexora-isotipo-app-movil-roto.svg');
     await page.goto('/shop');
     await expect(page.locator('.shop-logo img.brand-icon')).toHaveAttribute('src','/icons/nexora-isotipo-negativo-roto.svg');
+    await expect(page.locator('.shop-brand-name')).toHaveText('SUPER INSECURETECH STORE');
+    await expect(page).toHaveTitle('Super Insecure Tech Store');
     await page.goto('/challenges');
     await expect(page.locator('.challenge-brand img.challenge-brand-icon')).toHaveAttribute('src','/icons/nexora-isotipo-principal-roto.svg');
   });
@@ -96,7 +98,7 @@ test.describe('Nexora Shop browser regression — isolated lab',()=>{
       sessionStorage.setItem('nexora-tab-auth-v1',JSON.stringify({account:{id:101,email:'alice@nexora.example',display_name:'Alice Morgan',role:'customer'},token:'invalid.jwt.signature'}));
     });
     await page.reload();
-    await expect(page.getByRole('heading',{name:'Sign in to Nexora'})).toBeVisible();
+    await expect(page.getByRole('heading',{name:'Sign in to Super Insecure Tech Store'})).toBeVisible();
     await expect(page).toHaveURL(/\/login$/);
   });
 
@@ -164,7 +166,7 @@ test.describe('Nexora Shop browser regression — isolated lab',()=>{
   });
 
 
-  test('Nexora Navy and Green storefront identity renders consistently at desktop and mobile',async({page})=>{
+  test('Super Insecure Tech Store Navy and Green storefront identity renders consistently at desktop and mobile',async({page})=>{
     await page.setViewportSize({width:1440,height:900});
     await page.goto('/shop');
     await expect(page.locator('.shop-header')).toBeVisible();
@@ -277,7 +279,7 @@ test.describe('Nexora Shop browser regression — isolated lab',()=>{
     }));
     expect(button.color).toBe('rgb(8, 127, 56)');
     expect(button.background).toBe('rgb(255, 255, 255)');
-    await page.getByRole('button',{name:/Enter Nexora Shop/}).click();
+    await page.getByRole('button',{name:/Enter Super Insecure Tech Store/}).click();
     await expect(page).toHaveURL(/\/shop$/);
   });
 
