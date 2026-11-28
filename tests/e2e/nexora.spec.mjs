@@ -33,14 +33,14 @@ test.describe('Super Insecure Tech Store browser regression — isolated lab',()
     for(const email of ['alice@tech-store.com','bob@tech-store.com','admin@tech-store.com']){
       await expect(credentials.getByText(email,{exact:true})).toBeVisible();
     }
-    await expect(page.locator('body')).not.toContainText(/@(nexora\\.example|superinsecuretechstore\\.example)/);
+    await expect(page.locator('body')).not.toContainText(/@(nexora\.example|superinsecuretechstore\.example)/);
     await page.getByRole('button',{name:/Reset lab data/i}).click();
     await expect(page.getByLabel('Administrator email')).toHaveValue('admin@tech-store.com');
     await page.goto('/login');
     await expect(page.getByLabel('Email')).toHaveValue('alice@tech-store.com');
     const openapi=await (await request.get(base+'/api/openapi.json')).text();
     expect(openapi).toContain('alice@tech-store.com');
-    expect(openapi).not.toMatch(/@(nexora\\.example|superinsecuretechstore\\.example)/);
+    expect(openapi).not.toMatch(/@(nexora\.example|superinsecuretechstore\.example)/);
   });
 
   test('stored legacy session profile email is normalized without invalidating a valid JWT',async({page,request})=>{
