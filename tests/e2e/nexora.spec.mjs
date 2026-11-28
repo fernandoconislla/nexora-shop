@@ -2,8 +2,8 @@ import {test,expect} from '@playwright/test';
 
 const base=process.env.NEXORA_BASE??'http://127.0.0.1:8090';
 const supplier=process.env.NEXORA_SUPPLIER??'http://127.0.0.1:8091';
-const alice={email:'alice@nexora.example',password:'AliceDemo!2026'};
-const admin={email:'admin@nexora.example',password:'AdminDemo!2026'};
+const alice={email:'alice@superinsecuretechstore.example',password:'AliceDemo!2026'};
+const admin={email:'admin@superinsecuretechstore.example',password:'AdminDemo!2026'};
 
 async function reset(request){
   if(process.env.NEXORA_E2E_ALLOW_RESET!=='YES')throw new Error('Refusing destructive E2E tests: explicitly set NEXORA_E2E_ALLOW_RESET=YES on an isolated training deployment.');
@@ -95,7 +95,7 @@ test.describe('Super Insecure Tech Store browser regression — isolated lab',()
   test('invalid saved JWT produces a sign-in prompt instead of a cart failure',async({page})=>{
     await page.goto('/shop');
     await page.evaluate(()=>{
-      sessionStorage.setItem('nexora-tab-auth-v1',JSON.stringify({account:{id:101,email:'alice@nexora.example',display_name:'Alice Morgan',role:'customer'},token:'invalid.jwt.signature'}));
+      sessionStorage.setItem('nexora-tab-auth-v1',JSON.stringify({account:{id:101,email:'alice@superinsecuretechstore.example',display_name:'Alice Morgan',role:'customer'},token:'invalid.jwt.signature'}));
     });
     await page.reload();
     await expect(page.getByRole('heading',{name:'Sign in to Super Insecure Tech Store'})).toBeVisible();
