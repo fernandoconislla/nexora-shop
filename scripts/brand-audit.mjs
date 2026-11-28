@@ -11,10 +11,14 @@ for(const path of relevant){
     const line=source.slice(0,match.index).split('\n').length;
     failures.push(path+':'+line+' stale public brand: '+match[0]);
   }
-  if(path!=='apps/api/src/db.ts' && path!=='apps/api/test/rebrand-migration.test.mjs'){
-    for(const match of source.matchAll(/(?:alice|bob|admin)@nexora\.example/g)){
+  // Former domains may appear only in explicit persisted-data and session migration code.
+  const allowLegacy=path==='apps/api/src/db.ts' ||
+    path==='apps/api/test/rebrand-migration.test.mjs' ||
+    path==='apps/storefront/src/main.tsx';
+  if(!allowLegacy){
+    for(const match of source.matchAll(/@(?:nexora\.example|superinsecuretechstore\.example)/gi)){
       const line=source.slice(0,match.index).split('\n').length;
-      failures.push(path+':'+line+' stale demo login: '+match[0]);
+      failures.push(path+':'+line+' obsolete email domain: '+match[0]);
     }
   }
 }
@@ -22,6 +26,17 @@ for(const variant of ['principal','negativo','app-movil']){
   const path='apps/storefront/public/icons/super-insecure-tech-store-isotipo-'+variant+'-roto.svg';
   assert.ok(files.includes(path),'missing canonical SVG: '+path);
   assert.match(readFileSync(path,'utf8'),/Super Insecure Tech Store/);
+}
+for(const path of [
+  'database/seed.sql',
+  'apps/storefront/src/Welcome.tsx',
+  'apps/storefront/src/ChallengeSolutions.ts',
+  'README.md',
+]){
+  const source=readFileSync(path,'utf8');
+  for(const name of ['alice','bob','admin']){
+    assert.ok(source.includes(name+'@tech-store.com'),path+' missing canonical demo identity '+name);
+  }
 }
 assert.ok(files.includes('apps/api/test/rebrand-migration.test.mjs'),'migration regression test missing');
 if(failures.length){
