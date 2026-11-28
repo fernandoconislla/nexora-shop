@@ -869,3 +869,47 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
   .welcome-brand img.mark{width:40px;height:40px}
   .challenge-brand img.challenge-brand-icon{width:32px;height:32px}
 }
+
+
+/* Super Insecure Tech Store identity — preserve isotype SVG and layout. */
+.shop-header .shop-logo{
+  flex:0 0 auto;gap:11px;white-space:normal;
+}
+.shop-header .shop-brand-name,
+.welcome-brand .welcome-brand-name,
+.challenge-brand .challenge-brand-name{
+  display:flex;flex-direction:column;align-items:flex-start;
+  justify-content:center;line-height:1.08;white-space:nowrap;
+}
+.shop-header .shop-brand-name strong{
+  display:block;color:#fff;font-size:15px;font-weight:850;letter-spacing:.55px;
+}
+.shop-header .shop-brand-name>span{
+  display:block;color:var(--nx-green-bright);font-size:15px;
+  font-weight:850;letter-spacing:.55px;margin-top:3px;
+}
+.welcome-brand .welcome-brand-name strong{
+  display:block;color:var(--nx-navy);font-size:16px;font-weight:900;
+}
+.welcome-brand .welcome-brand-name>b{
+  display:block;color:var(--nx-green);font-size:16px;font-weight:900;margin-top:3px;
+}
+.welcome-brand .welcome-brand-name small{
+  display:block;margin-top:5px;letter-spacing:1.05px;font-size:9px;
+}
+.challenge-brand .challenge-brand-name{gap:2px}
+.challenge-brand .challenge-brand-name strong{font-size:12px;letter-spacing:.3px;color:#fff}
+.challenge-brand .challenge-brand-name>b{font-size:12px;letter-spacing:.3px;color:var(--nx-green-bright)}
+.challenge-header .challenge-brand{gap:8px}
+.challenge-header .challenge-brand small{margin-left:6px;white-space:nowrap}
+@media(max-width:800px){
+  .shop-header .shop-brand-name strong,.shop-header .shop-brand-name>span{font-size:13px}
+  .welcome-brand .welcome-brand-name strong,.welcome-brand .welcome-brand-name>b{font-size:14px}
+  .challenge-header .challenge-brand small{display:none}
+}
+@media(max-width:390px){
+  .shop-header .shop-logo{gap:6px}
+  .shop-header .shop-brand-name strong,.shop-header .shop-brand-name>span{font-size:11px;letter-spacing:0}
+  .welcome-brand .welcome-brand-name strong,.welcome-brand .welcome-brand-name>b{font-size:12px}
+  .welcome-brand .welcome-brand-name small{font-size:8px;letter-spacing:.4px}
+}
