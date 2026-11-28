@@ -28,6 +28,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Audit public branding across tracked sources
+        run: node scripts/brand-audit.mjs
       - name: Install dependencies
         run: npm install --no-audit --no-fund
       - name: Build API
@@ -53,6 +55,8 @@ jobs:
           test "$(docker compose ps -q | wc -l)" -eq 1
           docker compose ps
           curl -fsS http://127.0.0.1:8092/ -o /tmp/sits-monitor.html
+          grep -q 'SUPER INSECURE TECH STORE / PERFORMANCE' /tmp/sits-monitor.html
+          docker compose exec -T nexora node -e "fetch('http://127.0.0.1:80/staff').then(r=>r.text()).then(t=>{if(!t.includes('Super Insecure Tech Store Staff Directory'))process.exit(1)})"
           curl -fsS http://127.0.0.1:8092/metrics -o /tmp/sits-metrics.json
           curl -fsS -L http://127.0.0.1:8091/ -o /tmp/sits-supplier.html
           grep -q 'Sign in' /tmp/sits-supplier.html
