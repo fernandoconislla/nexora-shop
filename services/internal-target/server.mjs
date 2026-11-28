@@ -1,8 +1,8 @@
 import {createServer} from 'node:http';
 const pages = {
-  '/': ['Nexora Internal Portal', '<p>Internal operations information.</p><a href="/staff">Staff directory</a>'],
-  '/staff': ['Nexora Staff Directory', '<p>Operations, Inventory and Support (sample data).</p>'],
-  '/internal/marker': ['Nexora Diagnostics', '<p>FAKE-TRAINING-DATA</p>']
+  '/': ['Super Insecure Tech Store Internal Portal', '<p>Internal operations information.</p><a href="/staff">Staff directory</a>'],
+  '/staff': ['Super Insecure Tech Store Staff Directory', '<p>Operations, Inventory and Support (sample data).</p>'],
+  '/internal/marker': ['Super Insecure Tech Store Diagnostics', '<p>FAKE-TRAINING-DATA</p>']
 };
 createServer((request, response) => {
   const route = new URL(request.url ?? '/', 'http://localhost').pathname;
